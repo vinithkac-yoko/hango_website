@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-arimo);
+  --font-display: var(--font-space-grotesk);
+
+  /* Hango brand palette, sampled from Hango_final_svg.svg (the current logo —
+     supersedes the orange/amber palette in the old brand book PDF) */
+  --color-brand-red: #e82c25;
+  --color-brand-red-dark: #c5251f;
+  --color-brand-cream: #fff2dd;
+  --color-brand-black: #0a0a0a;
+  --color-brand-white: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+@layer components {
+  .btn-primary,
+  .btn-secondary,
+  .btn-secondary-invert {
+    @apply inline-flex cursor-pointer items-center justify-center rounded px-6 py-3 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red;
+  }
+  .btn-primary {
+    @apply bg-brand-red text-white hover:bg-brand-red-dark;
+  }
+  .btn-secondary {
+    @apply border border-black/20 text-black hover:border-black hover:bg-black/5;
+  }
+  .btn-secondary-invert {
+    @apply border border-white/30 text-white hover:border-white hover:bg-white/10;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.motion-rise {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-rise {
+    animation: none;
+  }
+}
