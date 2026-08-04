@@ -22,12 +22,24 @@ export default function ContactPage() {
 
           <dl className="mt-10 space-y-4 text-sm">
             <div>
-              <dt className="font-semibold text-black">Location</dt>
-              <dd className="text-black/60">{siteConfig.location}</dd>
+              <dt className="font-semibold text-black">Address</dt>
+              <dd className="text-black/60">{siteConfig.address}</dd>
             </div>
             <div>
               <dt className="font-semibold text-black">Email</dt>
               <dd className="text-black/60">{siteConfig.email}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-black">Phone</dt>
+              <dd className="text-black/60">{siteConfig.phones.join(" · ")}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-black">Instagram</dt>
+              <dd className="text-black/60">
+                <a href={siteConfig.instagram.url} className="hover:text-brand-red">
+                  {siteConfig.instagram.handle}
+                </a>
+              </dd>
             </div>
           </dl>
         </div>

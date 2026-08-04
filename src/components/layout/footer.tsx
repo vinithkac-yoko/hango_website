@@ -42,13 +42,31 @@ export default function Footer() {
               Get in touch
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-brand-cream/70">
-              <li>{siteConfig.location}</li>
+              <li>{siteConfig.address}</li>
               <li>
                 <a
                   href={`mailto:${siteConfig.email}`}
                   className="transition-colors hover:text-brand-red"
                 >
                   {siteConfig.email}
+                </a>
+              </li>
+              {siteConfig.phones.map((phone) => (
+                <li key={phone}>
+                  <a
+                    href={`tel:${phone.replace(/\s+/g, "")}`}
+                    className="transition-colors hover:text-brand-red"
+                  >
+                    {phone}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a
+                  href={siteConfig.instagram.url}
+                  className="transition-colors hover:text-brand-red"
+                >
+                  {siteConfig.instagram.handle}
                 </a>
               </li>
             </ul>

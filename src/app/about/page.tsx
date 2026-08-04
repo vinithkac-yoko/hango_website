@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { about, mission, vision, coreValues, targetAudience, elevatorPitch } from "@/data/company";
+import {
+  about,
+  mission,
+  vision,
+  coreValues,
+  targetAudience,
+  elevatorPitch,
+  whyHango,
+} from "@/data/company";
 
 export const metadata: Metadata = {
   title: "About",
@@ -56,6 +64,27 @@ export default function AboutPage() {
         <p className="text-2xl font-medium text-black md:text-4xl">
           &ldquo;{elevatorPitch.hook}&rdquo;
         </p>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-20 md:pb-28">
+        <h2 className="text-3xl font-bold text-black md:text-5xl">Why Hango</h2>
+        <ul className="mt-10 grid gap-x-12 gap-y-4 sm:grid-cols-2">
+          {whyHango.map((point) => (
+            <li key={point} className="flex items-center gap-3 text-lg text-black">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                className="h-5 w-5 shrink-0 text-brand-red"
+              >
+                <path
+                  fill="currentColor"
+                  d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z"
+                />
+              </svg>
+              {point}
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="border-t border-black/10 bg-brand-cream py-20 md:py-28">

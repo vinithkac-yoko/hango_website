@@ -79,6 +79,18 @@ export const growthStack = [
   },
 ];
 
+export const growthEnginePullQuote =
+  "We believe every business deserves a growth engine — not just marketing.";
+
+export const whyHango = [
+  "Strategy-driven approach",
+  "Performance focused",
+  "AI-powered solutions",
+  "End-to-end services",
+  "Creative excellence",
+  "Long-term growth partner",
+];
+
 export const targetAudience = [
   {
     title: "SMEs & Growing Businesses",
