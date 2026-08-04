@@ -15,10 +15,10 @@ export const about = [
 ];
 
 export const mission =
-  "To engineer digital growth by uniting marketing, technology, and branding into one powerful, results-driven partnership.";
+  "To engineer measurable digital growth through innovation, creativity, and technology.";
 
 export const vision =
-  "To become the growth engine behind every ambitious brand in the digital landscape.";
+  "To be the most trusted digital growth partner for businesses across industries.";
 
 export const coreValues = [
   {
