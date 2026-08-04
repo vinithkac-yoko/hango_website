@@ -22,6 +22,9 @@ export default function ServicesPage() {
       <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         <h2 className="text-2xl font-bold text-black md:text-3xl">{retainerService.title}</h2>
         <p className="mt-2 max-w-2xl text-black/60">{retainerService.description}</p>
+        <p className="mt-3 max-w-2xl text-sm text-black/40">
+          {retainerService.includes.join(" · ")}
+        </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {retainerService.tiers.map((tier, i) => (
@@ -66,7 +69,10 @@ export default function ServicesPage() {
                 className="grid gap-2 py-7 md:grid-cols-[1fr_2fr_auto] md:items-baseline md:gap-8"
               >
                 <h3 className="font-semibold">{service.title}</h3>
-                <p className="text-white/60">{service.description}</p>
+                <div>
+                  <p className="text-white/60">{service.description}</p>
+                  <p className="mt-1.5 text-sm text-white/30">{service.includes.join(" · ")}</p>
+                </div>
                 <p className="text-sm whitespace-nowrap text-brand-red md:text-right">
                   {service.pricingNote}
                 </p>

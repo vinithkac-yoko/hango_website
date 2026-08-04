@@ -7,6 +7,7 @@ export type RetainerService = {
   slug: string;
   title: string;
   description: string;
+  includes: string[];
   tiers: PricingTier[];
 };
 
@@ -14,6 +15,7 @@ export type ProjectService = {
   slug: string;
   title: string;
   description: string;
+  includes: string[];
   pricingNote: string;
 };
 
@@ -22,6 +24,14 @@ export const retainerService: RetainerService = {
   title: "Digital Marketing Monthly Package",
   description:
     "A recurring retainer covering social media marketing, SEO, SEM, performance ads, and content marketing — built to grow with you.",
+  includes: [
+    "Social Media Marketing",
+    "Search Engine Optimization (SEO)",
+    "Google Ads",
+    "Meta Ads",
+    "Performance Marketing",
+    "Content Marketing",
+  ],
   tiers: [
     {
       name: "Starter",
@@ -44,6 +54,7 @@ export const projectServices: ProjectService[] = [
     title: "Video Shoot",
     description:
       "Reels, ad films, documentaries, and short films — full shoot and post-production.",
+    includes: ["Videography", "Advertisement Films", "Reels Production"],
     pricingNote: "Package + custom quote for larger productions",
   },
   {
@@ -51,6 +62,7 @@ export const projectServices: ProjectService[] = [
     title: "Photoshoot",
     description:
       "Product photography, model and portfolio shoots, and brand campaign shoots.",
+    includes: ["Product Photography", "Commercial Photography"],
     pricingNote: "Package + custom quote",
   },
   {
@@ -58,6 +70,7 @@ export const projectServices: ProjectService[] = [
     title: "Video Editing & Print Design",
     description:
       "Posters, flyers, brochures, flex banners, pamphlets, and invitations — standalone or bundled.",
+    includes: ["Video Editing", "Posters", "Flyers", "Brochures", "Pamphlets", "Business Collaterals"],
     pricingNote: "Fixed packages per deliverable",
   },
   {
@@ -65,6 +78,7 @@ export const projectServices: ProjectService[] = [
     title: "Website Optimization",
     description:
       "Speed, SEO, and UI/UX improvements plus Core Web Vitals fixes for an existing website.",
+    includes: ["Website Optimization", "UI/UX Improvements"],
     pricingNote: "Package + custom quote",
   },
   {
@@ -72,6 +86,7 @@ export const projectServices: ProjectService[] = [
     title: "Brand Logo & Asset Design",
     description:
       "Logo, brand kit, colour palette, typography, and a full brand guidelines document.",
+    includes: ["Brand Identity", "Logo Design"],
     pricingNote: "Fixed packages",
   },
   {
@@ -79,6 +94,7 @@ export const projectServices: ProjectService[] = [
     title: "Digital Marketing Consultation",
     description:
       "Strategy audit, campaign review, and a one-on-one business advisory session.",
+    includes: ["Marketing Strategy", "Campaign Planning", "AI-Powered Business Solutions"],
     pricingNote: "Fixed per session",
   },
   {
@@ -86,6 +102,7 @@ export const projectServices: ProjectService[] = [
     title: "Website Development",
     description:
       "Custom websites with AI features — for businesses, portfolios, and landing pages.",
+    includes: ["Website Development", "Landing Pages"],
     pricingNote: "Package + custom quote",
   },
   {
@@ -93,12 +110,14 @@ export const projectServices: ProjectService[] = [
     title: "SEO — Search Engine Optimisation",
     description:
       "On-page, off-page, and technical SEO with keyword research and a full audit report.",
+    includes: ["Search Engine Optimization (SEO)"],
     pricingNote: "Package + custom quote",
   },
   {
     slug: "ads",
     title: "Meta Ads & Google Ads",
     description: "Campaign setup, creatives, targeting, and pixel/tracking configuration.",
+    includes: ["Google Ads", "Meta Ads", "Performance Marketing"],
     pricingNote: "Fixed setup fee + % of ad spend",
   },
 ];
