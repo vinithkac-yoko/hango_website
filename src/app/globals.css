@@ -2,7 +2,24 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #0a0a0a;
+  --foreground: #000f08;
+
+  /* Radius scale */
+  --radius-sm: 12px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  /* Elevation — offset + soft blur, never a zero-offset halo */
+  --shadow-sm: 0 1px 2px rgba(0, 15, 8, 0.06), 0 2px 8px rgba(0, 15, 8, 0.04);
+  --shadow-md: 0 2px 4px rgba(0, 15, 8, 0.06), 0 8px 24px rgba(0, 15, 8, 0.08);
+  --shadow-lg: 0 4px 8px rgba(0, 15, 8, 0.08), 0 16px 48px rgba(0, 15, 8, 0.12);
+  --shadow-brand: 0 2px 8px rgba(251, 54, 64, 0.24), 0 12px 32px rgba(251, 54, 64, 0.16);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.25s;
+  --dur-base: 0.5s;
+  --dur-slow: 0.8s;
 }
 
 @theme inline {
@@ -11,13 +28,14 @@
   --font-sans: var(--font-arimo);
   --font-display: var(--font-space-grotesk);
 
-  /* Hango brand palette, sampled from Hango_final_svg.svg (the current logo —
-     supersedes the orange/amber palette in the old brand book PDF) */
-  --color-brand-red: #e82c25;
-  --color-brand-red-dark: #c5251f;
-  --color-brand-cream: #fff2dd;
-  --color-brand-black: #0a0a0a;
+  /* Hango brand palette */
+  --color-brand-red: #fb3640;
+  --color-brand-red-dark: #d92730;
+  --color-brand-cream: #fff2d1;
+  --color-brand-black: #000f08;
   --color-brand-white: #ffffff;
+
+  --radius-brand: var(--radius-lg);
 }
 
 body {
@@ -34,42 +52,121 @@ body {
     font-family: var(--font-display), var(--font-sans), sans-serif;
     letter-spacing: -0.03em;
   }
+
+  /* The custom cursor replaces the pointer only where it can actually track it. */
+  @media (hover: hover) and (pointer: fine) {
+    body[data-custom-cursor="on"],
+    body[data-custom-cursor="on"] * {
+      cursor: none;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-red);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
   .btn-primary,
   .btn-secondary,
   .btn-secondary-invert {
-    @apply inline-flex cursor-pointer items-center justify-center rounded px-6 py-3 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red;
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-[14px] px-6 py-3 text-sm font-semibold;
+    transition:
+      background-color var(--dur-fast) var(--ease-out-expo),
+      border-color var(--dur-fast) var(--ease-out-expo),
+      box-shadow var(--dur-fast) var(--ease-out-expo),
+      color var(--dur-fast) var(--ease-out-expo);
   }
   .btn-primary {
-    @apply bg-brand-red text-white hover:bg-brand-red-dark;
+    @apply bg-brand-red text-white;
+    box-shadow: var(--shadow-brand);
+  }
+  .btn-primary:hover {
+    @apply bg-brand-red-dark;
+    box-shadow:
+      0 4px 12px rgba(251, 54, 64, 0.3),
+      0 16px 40px rgba(251, 54, 64, 0.22);
   }
   .btn-secondary {
-    @apply border border-black/20 text-black hover:border-black hover:bg-black/5;
+    @apply border border-black/15 text-brand-black;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-secondary:hover {
+    @apply border-black/40 bg-black/[0.03];
+    box-shadow: var(--shadow-md);
   }
   .btn-secondary-invert {
-    @apply border border-white/30 text-white hover:border-white hover:bg-white/10;
+    @apply border border-white/25 text-white;
+  }
+  .btn-secondary-invert:hover {
+    @apply border-white/60 bg-white/10;
+  }
+
+  /* Animated underline for nav links */
+  .nav-link {
+    @apply relative text-sm font-medium;
+    transition: color var(--dur-fast) var(--ease-out-expo);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 1.5px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+  }
+  .nav-link:hover::after,
+  .nav-link[data-active="true"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 }
 
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
+/* Ambient background textures — GPU-friendly, purely decorative */
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  50% {
+    transform: translate3d(0, -3%, 0) scale(1.06);
   }
 }
 
-.motion-rise {
-  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .motion-rise {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

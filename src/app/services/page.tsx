@@ -30,7 +30,7 @@ export default function ServicesPage() {
           {retainerService.tiers.map((tier, i) => (
             <div
               key={tier.name}
-              className={`flex flex-col rounded p-8 ${
+              className={`flex flex-col rounded-[18px] p-8 ${
                 i === 1 ? "border-2 border-brand-red" : "border border-black/15"
               }`}
             >

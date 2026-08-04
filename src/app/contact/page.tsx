@@ -44,7 +44,7 @@ export default function ContactPage() {
           </dl>
         </div>
 
-        <div className="rounded border border-black/15 bg-white p-8">
+        <div className="rounded-[18px] border border-black/15 bg-white p-8">
           <ContactForm />
         </div>
       </div>

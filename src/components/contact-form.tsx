@@ -31,7 +31,7 @@ export default function ContactForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1.5 w-full rounded border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 
@@ -45,7 +45,7 @@ export default function ContactForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1.5 w-full rounded border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 
@@ -59,7 +59,7 @@ export default function ContactForm() {
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-1.5 w-full rounded border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-black/15 px-4 py-2.5 text-sm outline-none focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 
