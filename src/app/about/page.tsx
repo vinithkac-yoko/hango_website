@@ -43,11 +43,6 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-white md:py-28">
-        <div
-          className="orb-b pointer-events-none absolute -left-1/4 top-1/4 h-[42vw] w-[42vw] rounded-full blur-3xl"
-          aria-hidden="true"
-          style={{ background: "radial-gradient(circle, rgba(251,54,64,0.14) 0%, transparent 65%)" }}
-        />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">What we hold to</h2>
 

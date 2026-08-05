@@ -43,11 +43,6 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
   const paraY = useTransform(my, (v) => v * 12);
   const btnX = useTransform(mx, (v) => v * 8);
   const btnY = useTransform(my, (v) => v * 8);
-  const glowAX = useTransform(mx, (v) => v * 46);
-  const glowAY = useTransform(my, (v) => v * 46);
-  const glowBX = useTransform(mx, (v) => v * -32);
-  const glowBY = useTransform(my, (v) => v * -32);
-
   function onMouseMove(e: React.MouseEvent) {
     if (reduce) return;
     const rect = sectionRef.current?.getBoundingClientRect();
@@ -80,30 +75,8 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
       {/* Circuit floor + ambient neon bloom */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="circuit-floor absolute inset-0" />
-        <motion.div
-          className="orb-a absolute -left-[10%] top-[-20%] h-[58vw] w-[58vw] rounded-full blur-3xl"
-          style={{
-            x: glowAX,
-            y: glowAY,
-            background: "radial-gradient(circle, rgba(251,54,64,0.20) 0%, transparent 64%)",
-          }}
-        />
-        <motion.div
-          className="orb-b absolute -right-[14%] top-[6%] h-[52vw] w-[52vw] rounded-full blur-3xl"
-          style={{
-            x: glowBX,
-            y: glowBY,
-            background: "radial-gradient(circle, rgba(255,242,209,0.07) 0%, transparent 66%)",
-          }}
-        />
         {/* Vignette keeps focus centred */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 45%, transparent 30%, rgba(0,0,0,0.72) 100%)",
-          }}
-        />
+        <div className="edge-light absolute inset-0" />
       </div>
 
       <AnimatePresence>

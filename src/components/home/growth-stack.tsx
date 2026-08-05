@@ -18,11 +18,6 @@ export default function GrowthStack({
   return (
     <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
-      <div
-        className="orb-b pointer-events-none absolute -right-1/4 top-1/4 h-[45vw] w-[45vw] rounded-full blur-3xl"
-        aria-hidden="true"
-        style={{ background: "radial-gradient(circle, rgba(251,54,64,0.16) 0%, transparent 65%)" }}
-      />
 
       <motion.div
         className="relative mx-auto max-w-6xl px-6"

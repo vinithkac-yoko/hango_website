@@ -54,11 +54,6 @@ export default function InternshipsPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-24 md:py-32">
-        <div
-          className="orb-c pointer-events-none absolute left-1/3 top-1/2 h-[44vw] w-[44vw] -translate-y-1/2 rounded-full blur-3xl"
-          aria-hidden="true"
-          style={{ background: "radial-gradient(circle, rgba(251,54,64,0.13) 0%, transparent 66%)" }}
-        />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-white md:text-5xl">Ready to apply?</h2>
           <p className="mt-4 max-w-xl text-white/55">

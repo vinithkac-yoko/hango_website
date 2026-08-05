@@ -112,11 +112,6 @@ export function ClosingCta() {
   return (
     <section className="relative overflow-hidden bg-[var(--color-surface-0)]">
       <div className="circuit-floor pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div
-        className="orb-c pointer-events-none absolute left-1/2 top-1/2 h-[58vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-        aria-hidden="true"
-        style={{ background: "radial-gradient(circle, rgba(251,54,64,0.16) 0%, transparent 66%)" }}
-      />
       <motion.div
         className="relative mx-auto max-w-6xl px-6 py-32 md:py-40"
         initial={{ opacity: 0, scale: 0.94, filter: "blur(10px)" }}

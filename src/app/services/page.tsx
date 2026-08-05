@@ -64,11 +64,6 @@ export default function ServicesPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-white md:py-28">
-        <div
-          className="orb-c pointer-events-none absolute -right-1/4 top-1/3 h-[42vw] w-[42vw] rounded-full blur-3xl"
-          aria-hidden="true"
-          style={{ background: "radial-gradient(circle, rgba(251,54,64,0.14) 0%, transparent 65%)" }}
-        />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold md:text-3xl">One-Time Services</h2>
           <p className="mt-2 max-w-2xl text-white/55">
