@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type MotionValue, useTransform } from "motion/react";
+import { motion, type MotionValue, useTransform } from "motion/react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -33,8 +33,6 @@ export default function HeroVisual({
   mx: MotionValue<number>;
   my: MotionValue<number>;
 }) {
-  const reduce = useReducedMotion();
-
   // Layers drift at different rates for depth.
   const farX = useTransform(mx, (v) => v * 14);
   const farY = useTransform(my, (v) => v * 14);
@@ -75,8 +73,8 @@ export default function HeroVisual({
               y1={e.from.y}
               x2={e.to.x}
               y2={e.to.y}
-              initial={reduce ? undefined : { pathLength: 0, opacity: 0 }}
-              whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.3 + i * 0.07, ease: EASE }}
             />
@@ -92,11 +90,10 @@ export default function HeroVisual({
               width="13"
               rx="4"
               fill="url(#barGrad)"
-              initial={reduce ? undefined : { height: 0, y: 214 }}
-              whileInView={reduce ? undefined : { height: b.h, y: 214 - b.h }}
+              initial={{ height: 0, y: 214 }}
+              whileInView={{ height: b.h, y: 214 - b.h }}
               viewport={{ once: true }}
               transition={{ duration: 0.75, delay: 0.55 + i * 0.09, ease: EASE }}
-              {...(reduce ? { height: b.h, y: 214 - b.h } : {})}
             />
           ))}
         </g>
@@ -105,16 +102,15 @@ export default function HeroVisual({
         {NODES.slice(1).map((n, i) => (
           <motion.g
             key={n.id}
-            initial={reduce ? undefined : { opacity: 0, scale: 0.4 }}
-            whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.4 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.45 + i * 0.07, ease: EASE }}
             style={{ transformOrigin: `${n.x}px ${n.y}px` }}
           >
             <circle cx={n.x} cy={n.y} r={n.r + 5} fill="#fb3640" fillOpacity="0.1" />
             <circle cx={n.x} cy={n.y} r={n.r} fill="#fb3640" fillOpacity="0.75" />
-            {!reduce && (
-              <motion.circle
+            <motion.circle
                 cx={n.x}
                 cy={n.y}
                 r={n.r}
@@ -126,17 +122,16 @@ export default function HeroVisual({
                   duration: 2.6,
                   delay: i * 0.42,
                   repeat: Infinity,
-                  ease: "easeOut",
-                }}
-              />
-            )}
+                ease: "easeOut",
+              }}
+            />
           </motion.g>
         ))}
 
         {/* Core */}
         <motion.g
-          initial={reduce ? undefined : { opacity: 0, scale: 0.5 }}
-          whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
           style={{ transformOrigin: "150px 150px" }}

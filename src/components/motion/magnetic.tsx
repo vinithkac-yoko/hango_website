@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 
 const SPRING = { stiffness: 260, damping: 22, mass: 0.6 };
 
@@ -48,17 +48,7 @@ export function MagneticLink({
   strength?: number;
   arrow?: boolean;
 }) {
-  const reduce = useReducedMotion();
   const { ref, sx, sy, onMove, onLeave } = useMagnet(strength);
-
-  if (reduce) {
-    return (
-      <Link href={href} className={className}>
-        {children}
-        {arrow && <Arrow />}
-      </Link>
-    );
-  }
 
   return (
     <motion.div
@@ -66,7 +56,9 @@ export function MagneticLink({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ x: sx, y: sy, display: "inline-block" }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.03, y: -2 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ type: "spring", stiffness: 380, damping: 22 }}
     >
       <Link href={href} className={`${className ?? ""} group`} data-cursor="button">
         {children}

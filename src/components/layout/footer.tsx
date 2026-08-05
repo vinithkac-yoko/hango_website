@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import Logo from "@/components/ui/logo";
 import { siteConfig } from "@/lib/site-config";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+const riseChild = {
+  hidden: { opacity: 0, y: 26, filter: "blur(6px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: EASE } },
+};
 
 const linkClass =
   "relative inline-block text-sm text-brand-cream/70 transition-colors duration-300 hover:text-brand-red after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-brand-red after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.16,1,0.3,1)] hover:after:origin-left hover:after:scale-x-100";
@@ -13,25 +19,43 @@ const linkClass =
 export default function Footer() {
   const year = new Date().getFullYear();
   const reduce = useReducedMotion();
+  const [konami, setKonami] = useState(0);
+
+  useEffect(() => {
+    const bump = () => setKonami((k) => k + 1);
+    window.addEventListener("hango:konami", bump);
+    return () => window.removeEventListener("hango:konami", bump);
+  }, []);
 
   return (
     <footer className="bg-brand-black text-brand-cream">
       {/* Thin divider that draws itself into view */}
       <motion.div
         className="h-px w-full origin-left bg-gradient-to-r from-brand-red/70 via-white/15 to-transparent"
-        initial={reduce ? undefined : { scaleX: 0 }}
-        whileInView={reduce ? undefined : { scaleX: 1 }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.1, ease: EASE }}
       />
 
       <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div>
+        <motion.div
+          className="grid gap-10 md:grid-cols-3"
+          initial={"hidden"}
+          whileInView={"show"}
+          viewport={{ once: true, margin: "-80px" }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
+        >
+          <motion.div variants={riseChild}>
             <Link href="/" className="group inline-flex items-center gap-2.5">
               <motion.span
                 className="relative inline-block"
-                whileHover={reduce ? undefined : { scale: 1.06 }}
+                whileHover={{ scale: 1.06 }}
+                animate={
+                  konami > 0 && !reduce
+                    ? { rotate: [0, -12, 12, 0], scale: [1, 1.25, 1.25, 1] }
+                    : undefined
+                }
                 transition={{ type: "spring", stiffness: 320, damping: 18 }}
               >
                 <span
@@ -46,9 +70,9 @@ export default function Footer() {
             <p className="mt-4 max-w-xs text-sm text-brand-cream/70">
               {siteConfig.tagline}. Based in {siteConfig.location}.
             </p>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={riseChild}>
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
               Navigate
             </h3>
@@ -61,9 +85,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={riseChild}>
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
               Get in touch
             </h3>
@@ -85,7 +109,7 @@ export default function Footer() {
                 <motion.a
                   href={siteConfig.instagram.url}
                   className="inline-flex items-center gap-2 text-sm text-brand-cream/70 transition-colors duration-300 hover:text-brand-red"
-                  whileHover={reduce ? undefined : { y: -2, scale: 1.04 }}
+                  whileHover={{ y: -2, scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 340, damping: 18 }}
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
@@ -98,12 +122,17 @@ export default function Footer() {
                 </motion.a>
               </li>
             </ul>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-brand-cream/50 sm:flex-row sm:items-center sm:justify-between">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
+          className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-brand-cream/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Hango. All rights reserved.</p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

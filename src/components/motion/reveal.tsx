@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -18,10 +18,6 @@ export function Reveal({
   blur?: boolean;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
-
-  if (reduce) return <div className={className}>{children}</div>;
-
   return (
     <motion.div
       className={className}
@@ -45,10 +41,6 @@ export function RevealGroup({
   stagger?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
-
-  if (reduce) return <div className={className}>{children}</div>;
-
   const container: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: stagger } },
@@ -58,8 +50,8 @@ export function RevealGroup({
     <motion.div
       className={className}
       variants={container}
-      initial="hidden"
-      whileInView="show"
+      initial={"hidden"}
+      whileInView={"show"}
       viewport={{ once: true, margin: "-80px" }}
     >
       {children}
@@ -87,16 +79,15 @@ export function WordReveal({
   className?: string;
   delay?: number;
 }) {
-  const reduce = useReducedMotion();
   const words = text.split(" ");
 
-  if (reduce) return <span className={className}>{text}</span>;
-
+  // Structure stays identical either way — only the variants drop out — so the
+  // server and client trees always match during hydration.
   return (
     <motion.span
       className={className}
-      initial="hidden"
-      whileInView="show"
+      initial={"hidden"}
+      whileInView={"show"}
       viewport={{ once: true, margin: "-80px" }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.035, delayChildren: delay } } }}
       aria-label={text}
@@ -106,10 +97,12 @@ export function WordReveal({
           <motion.span
             className="inline-block"
             aria-hidden="true"
-            variants={{
-              hidden: { y: "100%", opacity: 0 },
-              show: { y: "0%", opacity: 1, transition: { duration: 0.6, ease: EASE } },
-            }}
+            variants={
+              {
+                    hidden: { y: "100%", opacity: 0 },
+                    show: { y: "0%", opacity: 1, transition: { duration: 0.6, ease: EASE } },
+                  }
+            }
           >
             {word}
             {i < words.length - 1 ? " " : ""}

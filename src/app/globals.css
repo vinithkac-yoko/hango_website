@@ -71,13 +71,35 @@ body {
   .btn-primary,
   .btn-secondary,
   .btn-secondary-invert {
-    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-[14px] px-6 py-3 text-sm font-semibold;
+    @apply relative isolate inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[14px] px-6 py-3 text-sm font-semibold;
     transition:
       background-color var(--dur-fast) var(--ease-out-expo),
       border-color var(--dur-fast) var(--ease-out-expo),
-      box-shadow var(--dur-fast) var(--ease-out-expo),
+      box-shadow var(--dur-base) var(--ease-out-expo),
       color var(--dur-fast) var(--ease-out-expo);
   }
+
+  /* Glossy highlight that sweeps across on hover */
+  .btn-primary::before,
+  .btn-secondary-invert::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.32) 50%,
+      transparent 65%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.75s var(--ease-out-expo);
+  }
+  .btn-primary:hover::before,
+  .btn-secondary-invert:hover::before {
+    transform: translateX(120%);
+  }
+
   .btn-primary {
     @apply bg-brand-red text-white;
     box-shadow: var(--shadow-brand);
@@ -85,16 +107,30 @@ body {
   .btn-primary:hover {
     @apply bg-brand-red-dark;
     box-shadow:
-      0 4px 12px rgba(251, 54, 64, 0.3),
-      0 16px 40px rgba(251, 54, 64, 0.22);
+      0 6px 16px rgba(251, 54, 64, 0.34),
+      0 20px 48px rgba(251, 54, 64, 0.24);
   }
   .btn-secondary {
     @apply border border-black/15 text-brand-black;
     box-shadow: var(--shadow-sm);
   }
+  /* Outline morphs into a filled surface */
+  .btn-secondary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-brand-black);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+  }
   .btn-secondary:hover {
-    @apply border-black/40 bg-black/[0.03];
+    @apply border-brand-black text-white;
     box-shadow: var(--shadow-md);
+  }
+  .btn-secondary:hover::before {
+    transform: scaleY(1);
   }
   .btn-secondary-invert {
     @apply border border-white/25 text-white;
@@ -160,6 +196,106 @@ body {
   will-change: transform;
 }
 
+/* Liquid orbs — each traces its own slow path */
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -6%, 0) scale(1.1);
+  }
+  66% {
+    transform: translate3d(-3%, 4%, 0) scale(0.95);
+  }
+}
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  40% {
+    transform: translate3d(-6%, 5%, 0) scale(0.92);
+  }
+  75% {
+    transform: translate3d(5%, 3%, 0) scale(1.12);
+  }
+}
+@keyframes float-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+  50% {
+    transform: translate3d(6%, 7%, 0) scale(1.14);
+  }
+}
+
+.orb-a {
+  animation: float-a 26s ease-in-out infinite;
+  will-change: transform;
+}
+.orb-b {
+  animation: float-b 34s ease-in-out infinite;
+  will-change: transform;
+}
+.orb-c {
+  animation: float-c 42s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Cinematic grain — barely-there, slow crawl */
+@keyframes grain-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-2%, 1%, 0);
+  }
+  50% {
+    transform: translate3d(1%, -2%, 0);
+  }
+  75% {
+    transform: translate3d(2%, 2%, 0);
+  }
+}
+
+.grain-layer {
+  animation: grain-shift 14s steps(4, end) infinite;
+  will-change: transform;
+}
+
+/* A slow white highlight sweeping the accent headline */
+@keyframes sheen {
+  0%,
+  88%,
+  100% {
+    background-position: 180% center;
+  }
+  96% {
+    background-position: -80% center;
+  }
+}
+
+.kinetic-accent {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-brand-red) 40%,
+    #ff8a90 48%,
+    #ffffff 52%,
+    #ff8a90 56%,
+    var(--color-brand-red) 64%
+  );
+  background-size: 220% auto;
+  background-position: 180% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 8s ease-in-out infinite;
+  will-change: background-position;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -168,5 +304,17 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Ambient effects are rendered for hydration stability, then hidden here. */
+  .grain-root {
+    display: none;
+  }
+
+  .kinetic-accent {
+    background-image: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: var(--color-brand-red);
   }
 }

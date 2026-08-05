@@ -20,28 +20,25 @@ export default function PageLoader() {
   const reduce = useReducedMotion();
   const [done, setDone] = useState(false);
 
+  // Structure must match the server render on first paint, so reduced motion
+  // dismisses the overlay on the next tick rather than branching during render.
   useEffect(() => {
-    if (reduce) {
-      introPlayed = true;
-      return;
-    }
-    const t = setTimeout(() => {
-      introPlayed = true;
-      setDone(true);
-    }, 1200);
+    const t = setTimeout(
+      () => {
+        introPlayed = true;
+        setDone(true);
+      },
+      reduce ? 0 : 1200,
+    );
     return () => clearTimeout(t);
   }, [reduce]);
 
-  const holding = !done && !reduce;
-
   useEffect(() => {
-    document.body.style.overflow = holding ? "hidden" : "";
+    document.body.style.overflow = done ? "" : "hidden";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [holding]);
-
-  if (reduce) return null;
+  }, [done]);
 
   return (
     <AnimatePresence>
