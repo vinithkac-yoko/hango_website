@@ -16,16 +16,32 @@ export default function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
+  // The homepage is dark end to end, so the bar inverts there — transparent
+  // over the hero, then dark glass once it lifts off.
+  const onDarkPage = pathname === "/";
+
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
   return (
     <motion.header
-      className="sticky top-0 z-50"
+      className="fixed inset-x-0 top-0 z-50"
       animate={{
-        backgroundColor: scrolled ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0)",
-        borderBottomColor: scrolled ? "rgba(0,15,8,0.08)" : "rgba(0,15,8,0)",
+        backgroundColor: scrolled
+          ? onDarkPage
+            ? "rgba(0,15,8,0.72)"
+            : "rgba(255,255,255,0.72)"
+          : "rgba(255,255,255,0)",
+        borderBottomColor: scrolled
+          ? onDarkPage
+            ? "rgba(255,255,255,0.08)"
+            : "rgba(0,15,8,0.08)"
+          : "rgba(255,255,255,0)",
         backdropFilter: scrolled ? "blur(14px) saturate(180%)" : "blur(0px)",
-        boxShadow: scrolled ? "0 1px 2px rgba(0,15,8,0.04), 0 8px 24px rgba(0,15,8,0.05)" : "none",
+        boxShadow: scrolled
+          ? onDarkPage
+            ? "0 1px 2px rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.35)"
+            : "0 1px 2px rgba(0,15,8,0.04), 0 8px 24px rgba(0,15,8,0.05)"
+          : "none",
       }}
       transition={{ duration: 0.4, ease: EASE }}
       style={{ borderBottomWidth: 1, borderBottomStyle: "solid" }}
@@ -43,7 +59,13 @@ export default function Header() {
           >
             <Logo as="mark" className="h-8 w-auto" />
           </motion.span>
-          <span className="font-display text-xl font-bold text-brand-black">Hango</span>
+          <span
+            className={`font-display text-xl font-bold transition-colors duration-500 ${
+              onDarkPage ? "text-white" : "text-brand-black"
+            }`}
+          >
+            Hango
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -52,7 +74,9 @@ export default function Header() {
               key={item.href}
               href={item.href}
               data-active={pathname === item.href}
-              className="nav-link text-brand-black/70 hover:text-brand-red data-[active=true]:text-brand-red"
+              className={`nav-link transition-colors duration-500 hover:text-brand-red data-[active=true]:text-brand-red ${
+                onDarkPage ? "text-white/75" : "text-brand-black/70"
+              }`}
             >
               {item.label}
             </Link>
@@ -70,7 +94,9 @@ export default function Header() {
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 cursor-pointer items-center justify-center text-brand-black md:hidden"
+          className={`flex h-10 w-10 cursor-pointer items-center justify-center transition-colors duration-500 md:hidden ${
+            onDarkPage ? "text-white" : "text-brand-black"
+          }`}
         >
           <span className="sr-only">Toggle menu</span>
           <div className="flex flex-col gap-1.5">
@@ -100,7 +126,9 @@ export default function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="overflow-hidden border-t border-black/5 bg-white/95 backdrop-blur md:hidden"
+            className={`overflow-hidden border-t backdrop-blur md:hidden ${
+              onDarkPage ? "border-white/10 bg-[#000f08]/95" : "border-black/5 bg-white/95"
+            }`}
           >
             <div className="flex flex-col gap-1 px-6 py-4">
               {siteConfig.nav.map((item) => (
@@ -108,7 +136,11 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-[12px] px-3 py-2.5 text-sm font-medium text-brand-black/80 transition-colors hover:bg-brand-cream"
+                  className={`rounded-[12px] px-3 py-2.5 text-sm font-medium transition-colors ${
+                    onDarkPage
+                      ? "text-white/80 hover:bg-white/10"
+                      : "text-brand-black/80 hover:bg-brand-cream"
+                  }`}
                 >
                   {item.label}
                 </Link>

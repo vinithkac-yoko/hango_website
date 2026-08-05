@@ -35,7 +35,7 @@ export default function Values({
   const shadowY = useTransform(sy, [-0.5, 0.5], [14, -6]);
   const boxShadow = useTransform(
     [shadowX, shadowY],
-    ([bx, by]: number[]) => `${bx}px ${by + 16}px 44px rgba(0,15,8,0.10)`,
+    ([bx, by]: number[]) => `${bx}px ${by + 16}px 54px rgba(251,54,64,0.10)`,
   );
 
   function onMove(e: React.MouseEvent) {
@@ -52,17 +52,18 @@ export default function Values({
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+    <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
+      <div className="circuit-floor pointer-events-none absolute inset-0 opacity-70" aria-hidden="true" />
       <div
         ref={ref}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
-        className="grid gap-12 md:grid-cols-2 md:gap-20"
+        className="relative mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:gap-20"
         style={{ perspective: 1200 }}
       >
         {/* Editorial quote — enters from the left */}
         <motion.h2
-          className="text-2xl font-medium text-brand-black md:text-3xl"
+          className="text-2xl font-medium text-white md:text-3xl"
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
           initial={{ opacity: 0, x: -56, filter: "blur(8px)" }}
           whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
@@ -74,7 +75,7 @@ export default function Values({
 
         {/* Value list — enters from the right */}
         <motion.ul
-          className="rounded-[18px] border-t border-black/10 pt-6"
+          className="rounded-[18px] border-t border-white/10 pt-6"
           style={{ boxShadow }}
           initial={{ opacity: 0, x: 56, filter: "blur(8px)" }}
           whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
@@ -85,17 +86,17 @@ export default function Values({
             <motion.li
               key={value.title}
               data-cursor="card"
-              className="group relative border-b border-black/10 py-6"
+              className="group relative border-b border-white/10 py-6"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: 0.24 + i * 0.09, ease: EASE }}
               whileHover={{ y: -3 }}
             >
-              <span className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-brand-cream/0 transition-colors duration-500 group-hover:bg-brand-cream/70" />
+              <span className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-white/0 transition-colors duration-500 group-hover:bg-white/[0.05]" />
               <span className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-brand-red transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-              <h3 className="relative text-lg font-semibold text-brand-black">{value.title}</h3>
-              <p className="relative mt-1 text-brand-black/60 transition-colors duration-500 group-hover:text-brand-black/80">
+              <h3 className="relative text-lg font-semibold text-white">{value.title}</h3>
+              <p className="relative mt-1 text-white/55 transition-colors duration-500 group-hover:text-white/85">
                 {value.description}
               </p>
             </motion.li>
@@ -109,11 +110,12 @@ export default function Values({
 /** Closing call to action — enters with a zoom-fade. */
 export function ClosingCta() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden bg-[var(--color-surface-0)]">
+      <div className="circuit-floor pointer-events-none absolute inset-0" aria-hidden="true" />
       <div
         className="orb-c pointer-events-none absolute left-1/2 top-1/2 h-[58vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         aria-hidden="true"
-        style={{ background: "radial-gradient(circle, rgba(251,54,64,0.12) 0%, transparent 66%)" }}
+        style={{ background: "radial-gradient(circle, rgba(251,54,64,0.16) 0%, transparent 66%)" }}
       />
       <motion.div
         className="relative mx-auto max-w-6xl px-6 py-32 md:py-40"
@@ -122,10 +124,10 @@ export function ClosingCta() {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.9, ease: EASE }}
       >
-        <h2 className="max-w-2xl text-3xl font-bold text-brand-black md:text-5xl">
+        <h2 className="max-w-2xl text-3xl font-bold text-white md:text-5xl">
           Ready to grow with Hango?
         </h2>
-        <p className="mt-4 max-w-xl text-brand-black/60">
+        <p className="mt-4 max-w-xl text-white/55">
           Tell us about your business and we&apos;ll put together a plan.
         </p>
         <div className="mt-8">

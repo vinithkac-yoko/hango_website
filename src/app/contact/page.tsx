@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <section className="bg-brand-cream">
-      <div className="mx-auto grid max-w-5xl gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
+      <div className="mx-auto grid max-w-5xl gap-12 px-6 pb-20 pt-32 md:grid-cols-2 md:pb-28 md:pt-36">
         <div>
           <h1 className="text-4xl font-bold text-black md:text-5xl">
             Let&apos;s talk about your project

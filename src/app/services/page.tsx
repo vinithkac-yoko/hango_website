@@ -12,7 +12,7 @@ export default function ServicesPage() {
   return (
     <>
       <section className="border-b border-black/10 bg-brand-cream">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-28 md:pt-36">
           <h1 className="max-w-2xl text-4xl font-bold text-black md:text-6xl">
             Marketing retainers and one-time projects, priced to fit.
           </h1>
