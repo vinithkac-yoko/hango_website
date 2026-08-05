@@ -16,7 +16,7 @@ export default function GrowthStack({
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section className="relative overflow-hidden bg-brand-black py-20 text-white md:py-28">
+    <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <div
         className="orb-b pointer-events-none absolute -right-1/4 top-1/4 h-[45vw] w-[45vw] rounded-full blur-3xl"

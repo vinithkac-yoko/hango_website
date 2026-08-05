@@ -35,7 +35,7 @@ export default function InternshipsPage() {
           ))}
         </div>
 
-        <div className="mt-6 rounded-[18px] bg-brand-black p-8 text-white">
+        <div className="mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-white">
           <h2 className="text-xl font-semibold">{collegeTieUp.title}</h2>
           <p className="mt-3 max-w-2xl text-white/70">{collegeTieUp.description}</p>
           <Link href="/contact" className="btn-primary mt-6">

@@ -28,7 +28,7 @@ export default function Header() {
       animate={{
         backgroundColor: scrolled
           ? onDarkPage
-            ? "rgba(0,15,8,0.72)"
+            ? "rgba(11,9,6,0.78)"
             : "rgba(255,255,255,0.72)"
           : "rgba(255,255,255,0)",
         borderBottomColor: scrolled
@@ -127,7 +127,7 @@ export default function Header() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE }}
             className={`overflow-hidden border-t backdrop-blur md:hidden ${
-              onDarkPage ? "border-white/10 bg-[#000f08]/95" : "border-black/5 bg-white/95"
+              onDarkPage ? "border-white/10 bg-[#0b0906]/95" : "border-black/5 bg-white/95"
             }`}
           >
             <div className="flex flex-col gap-1 px-6 py-4">

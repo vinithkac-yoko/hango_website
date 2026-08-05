@@ -28,7 +28,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-brand-black text-brand-cream">
+    <footer className="bg-[var(--color-surface-0)] text-brand-cream">
       {/* Thin divider that draws itself into view */}
       <motion.div
         className="h-px w-full origin-left bg-gradient-to-r from-brand-red/70 via-white/15 to-transparent"

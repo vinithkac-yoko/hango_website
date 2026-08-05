@@ -115,12 +115,12 @@ export default function IsoScene({
       >
         <defs>
           <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0d2018" />
-            <stop offset="100%" stopColor="#02100a" />
+            <stop offset="0%" stopColor="#1b1710" />
+            <stop offset="100%" stopColor="#0c0a06" />
           </linearGradient>
           <linearGradient id="plinth" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#15291f" />
-            <stop offset="100%" stopColor="#071a11" />
+            <stop offset="0%" stopColor="#241e14" />
+            <stop offset="100%" stopColor="#14100a" />
           </linearGradient>
           <radialGradient id="coreGlow">
             <stop offset="0%" stopColor="#fb3640" stopOpacity="0.85" />
@@ -145,11 +145,11 @@ export default function IsoScene({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: EASE }}
         >
-          <polygon points={PLATFORM_SIDE_L} fill="#010b06" />
-          <polygon points={PLATFORM_SIDE_R} fill="#061710" />
-          <polygon points={PLATFORM} fill="url(#deck)" stroke="#142a20" strokeWidth="1" />
+          <polygon points={PLATFORM_SIDE_L} fill="#070503" />
+          <polygon points={PLATFORM_SIDE_R} fill="#110e09" />
+          <polygon points={PLATFORM} fill="url(#deck)" stroke="#2b2519" strokeWidth="1" />
 
-          <g stroke="#fb3640" strokeOpacity="0.09" strokeWidth="0.75">
+          <g stroke="#fff2d1" strokeOpacity="0.07" strokeWidth="0.75">
             {GRID_LINES.map((d, i) => (
               <path key={i} d={d} />
             ))}
@@ -222,7 +222,7 @@ export default function IsoScene({
                   `${sx},${sy + 9}`,
                   `${sx - 11},${sy}`,
                 ].join(" ")}
-                fill="#04140c"
+                fill="#0e0b07"
                 stroke="#fb3640"
                 strokeWidth="1.6"
                 filter="url(#neon)"
@@ -247,8 +247,8 @@ export default function IsoScene({
           transition={{ duration: 0.85, delay: 0.35, ease: EASE }}
         >
           <circle cx={CX} cy={CY - 0.34 * U} r="120" fill="url(#coreGlow)" opacity="0.7" />
-          <polygon points={PLINTH_L} fill="#02100a" />
-          <polygon points={PLINTH_R} fill="#071a11" />
+          <polygon points={PLINTH_L} fill="#0c0a06" />
+          <polygon points={PLINTH_R} fill="#14100a" />
           <polygon
             points={PLINTH_TOP}
             fill="url(#plinth)"
