@@ -13,16 +13,16 @@ export default function ServicesPage() {
     <>
       <section className="border-b border-black/10 bg-brand-cream">
         <div className="mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-28 md:pt-36">
-          <h1 className="max-w-2xl text-4xl font-bold text-black md:text-6xl">
+          <h1 className="max-w-2xl text-4xl font-bold text-brand-black md:text-6xl">
             Marketing retainers and one-time projects, priced to fit.
           </h1>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-        <h2 className="text-2xl font-bold text-black md:text-3xl">{retainerService.title}</h2>
-        <p className="mt-2 max-w-2xl text-black/60">{retainerService.description}</p>
-        <p className="mt-3 max-w-2xl text-sm text-black/40">
+        <h2 className="text-2xl font-bold text-brand-black md:text-3xl">{retainerService.title}</h2>
+        <p className="mt-2 max-w-2xl text-brand-black/60">{retainerService.description}</p>
+        <p className="mt-3 max-w-2xl text-sm text-brand-black/40">
           {retainerService.includes.join(" · ")}
         </p>
 
@@ -34,9 +34,9 @@ export default function ServicesPage() {
                 i === 1 ? "border-2 border-brand-red" : "border border-black/15"
               }`}
             >
-              <h3 className="text-lg font-semibold text-black">{tier.name}</h3>
-              <p className="mt-1 text-sm text-black/50">Contact us for pricing</p>
-              <ul className="mt-6 flex-1 space-y-3 text-sm text-black/70">
+              <h3 className="text-lg font-semibold text-brand-black">{tier.name}</h3>
+              <p className="mt-1 text-sm text-brand-black/50">Contact us for pricing</p>
+              <ul className="mt-6 flex-1 space-y-3 text-sm text-brand-black/70">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2">
                     <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-red" />
@@ -55,7 +55,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="bg-black py-20 text-white md:py-28">
+      <section className="bg-[var(--color-surface-1)] py-20 text-white md:py-28">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold md:text-3xl">One-Time Services</h2>
           <p className="mt-2 max-w-2xl text-white/60">
@@ -83,8 +83,8 @@ export default function ServicesPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <h2 className="text-3xl font-bold text-black md:text-5xl">Not sure what you need?</h2>
-        <p className="mt-4 max-w-xl text-black/60">
+        <h2 className="text-3xl font-bold text-brand-black md:text-5xl">Not sure what you need?</h2>
+        <p className="mt-4 max-w-xl text-brand-black/60">
           Book a consultation and we&apos;ll recommend the right package for your business.
         </p>
         <Link href="/contact" className="btn-primary mt-8">

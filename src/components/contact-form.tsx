@@ -23,7 +23,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label htmlFor="name" className="text-sm font-medium text-black">
+        <label htmlFor="name" className="text-sm font-medium text-brand-black">
           Name
         </label>
         <input
@@ -36,7 +36,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="email" className="text-sm font-medium text-black">
+        <label htmlFor="email" className="text-sm font-medium text-brand-black">
           Email
         </label>
         <input
@@ -50,7 +50,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="text-sm font-medium text-black">
+        <label htmlFor="message" className="text-sm font-medium text-brand-black">
           How can we help?
         </label>
         <textarea

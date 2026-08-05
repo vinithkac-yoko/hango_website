@@ -13,10 +13,10 @@ export default function InternshipsPage() {
     <>
       <section className="border-b border-black/10 bg-brand-cream">
         <div className="mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-28 md:pt-36">
-          <h1 className="max-w-2xl text-4xl font-bold text-black md:text-6xl">
+          <h1 className="max-w-2xl text-4xl font-bold text-brand-black md:text-6xl">
             Real client work. A real certificate.
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-black/70">
+          <p className="mt-4 max-w-xl text-lg text-brand-black/70">
             For 2nd year and final year college students — work on an actual client project
             and receive a certificate for it.
           </p>
@@ -28,9 +28,9 @@ export default function InternshipsPage() {
           {internshipPrograms.map((program) => (
             <div key={program.slug} className="rounded-[18px] border border-black/15 p-8">
               <p className="text-sm font-semibold text-brand-red">{program.duration}</p>
-              <h2 className="mt-2 text-xl font-semibold text-black">{program.title}</h2>
-              <p className="mt-1 text-sm text-black/50">{program.audience}</p>
-              <p className="mt-4 text-black/70">{program.description}</p>
+              <h2 className="mt-2 text-xl font-semibold text-brand-black">{program.title}</h2>
+              <p className="mt-1 text-sm text-brand-black/50">{program.audience}</p>
+              <p className="mt-4 text-brand-black/70">{program.description}</p>
             </div>
           ))}
         </div>
@@ -45,8 +45,8 @@ export default function InternshipsPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-24 md:pb-32">
-        <h2 className="text-3xl font-bold text-black md:text-5xl">Ready to apply?</h2>
-        <p className="mt-4 max-w-xl text-black/60">
+        <h2 className="text-3xl font-bold text-brand-black md:text-5xl">Ready to apply?</h2>
+        <p className="mt-4 max-w-xl text-brand-black/60">
           Reach out with your college, department of interest, and preferred duration.
         </p>
         <Link href="/contact" className="btn-primary mt-8">

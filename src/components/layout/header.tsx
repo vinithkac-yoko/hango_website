@@ -34,13 +34,13 @@ export default function Header() {
         borderBottomColor: scrolled
           ? onDarkPage
             ? "rgba(255,255,255,0.08)"
-            : "rgba(0,15,8,0.08)"
+            : "rgba(20,17,11,0.08)"
           : "rgba(255,255,255,0)",
         backdropFilter: scrolled ? "blur(14px) saturate(180%)" : "blur(0px)",
         boxShadow: scrolled
           ? onDarkPage
             ? "0 1px 2px rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.35)"
-            : "0 1px 2px rgba(0,15,8,0.04), 0 8px 24px rgba(0,15,8,0.05)"
+            : "0 1px 2px rgba(20,17,11,0.04), 0 8px 24px rgba(20,17,11,0.05)"
           : "none",
       }}
       transition={{ duration: 0.4, ease: EASE }}

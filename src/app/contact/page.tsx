@@ -12,30 +12,30 @@ export default function ContactPage() {
     <section className="bg-brand-cream">
       <div className="mx-auto grid max-w-5xl gap-12 px-6 pb-20 pt-32 md:grid-cols-2 md:pb-28 md:pt-36">
         <div>
-          <h1 className="text-4xl font-bold text-black md:text-5xl">
+          <h1 className="text-4xl font-bold text-brand-black md:text-5xl">
             Let&apos;s talk about your project
           </h1>
-          <p className="mt-4 text-lg text-black/70">
+          <p className="mt-4 text-lg text-brand-black/70">
             Tell us a bit about your business and what you&apos;re looking for — we&apos;ll
             get back to you with a plan.
           </p>
 
           <dl className="mt-10 space-y-4 text-sm">
             <div>
-              <dt className="font-semibold text-black">Address</dt>
-              <dd className="text-black/60">{siteConfig.address}</dd>
+              <dt className="font-semibold text-brand-black">Address</dt>
+              <dd className="text-brand-black/60">{siteConfig.address}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-black">Email</dt>
-              <dd className="text-black/60">{siteConfig.email}</dd>
+              <dt className="font-semibold text-brand-black">Email</dt>
+              <dd className="text-brand-black/60">{siteConfig.email}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-black">Phone</dt>
-              <dd className="text-black/60">{siteConfig.phones.join(" · ")}</dd>
+              <dt className="font-semibold text-brand-black">Phone</dt>
+              <dd className="text-brand-black/60">{siteConfig.phones.join(" · ")}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-black">Instagram</dt>
-              <dd className="text-black/60">
+              <dt className="font-semibold text-brand-black">Instagram</dt>
+              <dd className="text-brand-black/60">
                 <a href={siteConfig.instagram.url} className="hover:text-brand-red">
                   {siteConfig.instagram.handle}
                 </a>

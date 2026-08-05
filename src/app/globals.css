@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #000f08;
+  --foreground: #14110b;
 
   /* Radius scale */
   --radius-sm: 12px;
@@ -10,9 +10,9 @@
   --radius-lg: 18px;
 
   /* Elevation — offset + soft blur, never a zero-offset halo */
-  --shadow-sm: 0 1px 2px rgba(0, 15, 8, 0.06), 0 2px 8px rgba(0, 15, 8, 0.04);
-  --shadow-md: 0 2px 4px rgba(0, 15, 8, 0.06), 0 8px 24px rgba(0, 15, 8, 0.08);
-  --shadow-lg: 0 4px 8px rgba(0, 15, 8, 0.08), 0 16px 48px rgba(0, 15, 8, 0.12);
+  --shadow-sm: 0 1px 2px rgba(20, 17, 11, 0.06), 0 2px 8px rgba(20, 17, 11, 0.04);
+  --shadow-md: 0 2px 4px rgba(20, 17, 11, 0.06), 0 8px 24px rgba(20, 17, 11, 0.08);
+  --shadow-lg: 0 4px 8px rgba(20, 17, 11, 0.08), 0 16px 48px rgba(20, 17, 11, 0.12);
   --shadow-brand: 0 2px 8px rgba(251, 54, 64, 0.24), 0 12px 32px rgba(251, 54, 64, 0.16);
 
   /* Motion */
@@ -28,11 +28,13 @@
   --font-sans: var(--font-arimo);
   --font-display: var(--font-space-grotesk);
 
-  /* Hango brand palette */
+  /* Hango brand palette. The dark is a warm near-black rather than the
+     green-tinted #000F08 from the original spec, which cast the whole UI
+     green when used at scale. */
   --color-brand-red: #fb3640;
   --color-brand-red-dark: #d92730;
   --color-brand-cream: #fff2d1;
-  --color-brand-black: #000f08;
+  --color-brand-black: #14110b;
   --color-brand-white: #ffffff;
 
   /* Dark surfaces are the brand cream (#FFF2D1) taken down to near-black, so

@@ -21,10 +21,10 @@ export default function AboutPage() {
     <>
       <section className="border-b border-black/10 bg-brand-cream">
         <div className="mx-auto max-w-3xl px-6 pb-20 pt-32 md:pb-28 md:pt-36">
-          <h1 className="text-4xl font-bold text-black md:text-6xl">
+          <h1 className="text-4xl font-bold text-brand-black md:text-6xl">
             To hang high is the point.
           </h1>
-          <div className="mt-8 space-y-5 text-lg text-black/70">
+          <div className="mt-8 space-y-5 text-lg text-brand-black/70">
             {about.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -35,17 +35,17 @@ export default function AboutPage() {
       <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         <div className="grid gap-12 md:grid-cols-2 md:gap-20">
           <div>
-            <h2 className="text-sm font-semibold tracking-wide text-black/40">Mission</h2>
-            <p className="mt-3 text-2xl font-medium text-black">{mission}</p>
+            <h2 className="text-sm font-semibold tracking-wide text-brand-black/40">Mission</h2>
+            <p className="mt-3 text-2xl font-medium text-brand-black">{mission}</p>
           </div>
           <div>
-            <h2 className="text-sm font-semibold tracking-wide text-black/40">Vision</h2>
-            <p className="mt-3 text-2xl font-medium text-black">{vision}</p>
+            <h2 className="text-sm font-semibold tracking-wide text-brand-black/40">Vision</h2>
+            <p className="mt-3 text-2xl font-medium text-brand-black">{vision}</p>
           </div>
         </div>
       </section>
 
-      <section className="bg-black py-20 text-white md:py-28">
+      <section className="bg-[var(--color-surface-1)] py-20 text-white md:py-28">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">What we hold to</h2>
 
@@ -61,16 +61,16 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-        <p className="text-2xl font-medium text-black md:text-4xl">
+        <p className="text-2xl font-medium text-brand-black md:text-4xl">
           &ldquo;{elevatorPitch.hook}&rdquo;
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-20 md:pb-28">
-        <h2 className="text-3xl font-bold text-black md:text-5xl">Why Hango</h2>
+        <h2 className="text-3xl font-bold text-brand-black md:text-5xl">Why Hango</h2>
         <ul className="mt-10 grid gap-x-12 gap-y-4 sm:grid-cols-2">
           {whyHango.map((point) => (
-            <li key={point} className="flex items-center gap-3 text-lg text-black">
+            <li key={point} className="flex items-center gap-3 text-lg text-brand-black">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 20 20"
@@ -89,7 +89,7 @@ export default function AboutPage() {
 
       <section className="border-t border-black/10 bg-brand-cream py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="max-w-2xl text-3xl font-bold text-black md:text-5xl">Who we work with</h2>
+          <h2 className="max-w-2xl text-3xl font-bold text-brand-black md:text-5xl">Who we work with</h2>
 
           <div className="mt-12 divide-y divide-black/10 border-t border-black/10">
             {targetAudience.map((segment) => (
@@ -97,8 +97,8 @@ export default function AboutPage() {
                 key={segment.title}
                 className="grid gap-2 py-7 md:grid-cols-[1fr_2fr] md:gap-12"
               >
-                <h3 className="font-semibold text-black">{segment.title}</h3>
-                <p className="text-black/60">{segment.description}</p>
+                <h3 className="font-semibold text-brand-black">{segment.title}</h3>
+                <p className="text-brand-black/60">{segment.description}</p>
               </div>
             ))}
           </div>
