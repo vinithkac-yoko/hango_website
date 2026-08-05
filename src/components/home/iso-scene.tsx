@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useTransform, type MotionValue } from "motion/react";
+import Logo3D from "./logo-3d";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -257,28 +258,25 @@ export default function IsoScene({
             strokeWidth="1.4"
             filter="url(#neon)"
           />
-
-          {/* Hango mark, extruded above the plinth */}
-          <motion.g
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.05, ease: EASE }}
-          >
-            <g
-              transform={`translate(${CX - 20}, ${CY - 0.34 * U - 46}) scale(1.5)`}
-              fill="#fb3640"
-              filter="url(#neon)"
-            >
-              <rect x="0" y="0" width="8" height="17" rx="2.5" />
-              <rect x="19" y="0" width="8" height="17" rx="2.5" />
-              <rect x="0" y="7" width="27" height="6" />
-              <rect x="0" y="17" width="27" height="6" />
-              <rect x="0" y="17" width="8" height="17" rx="2.5" />
-              <rect x="19" y="17" width="8" height="17" rx="2.5" />
-            </g>
-          </motion.g>
         </motion.g>
       </motion.svg>
+
+      {/* Faux-3D mark, parked on the plinth. Kept in HTML rather than SVG so it
+          can use real CSS 3D transforms for the extrusion. */}
+      <motion.div
+        className="absolute"
+        style={{
+          left: `${(CX / 600) * 100}%`,
+          top: `${((CY - 0.34 * U) / 520) * 100}%`,
+          x: "-50%",
+          y: "-72%",
+        }}
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, delay: 1.05, ease: EASE }}
+      >
+        <Logo3D mx={mx} my={my} />
+      </motion.div>
     </motion.div>
   );
 }
