@@ -1,16 +1,19 @@
 import type { ReactNode } from "react";
+import IsoMotif, { type MotifKind } from "@/components/iso/iso-motif";
 
 /**
  * Dark neon page header, matching the homepage hero's lighting so inner pages
- * read as the same world: circuit floor, red bloom and a centring vignette.
+ * read as the same world: circuit floor, red bloom and an isometric motif.
  */
 export default function PageHero({
   title,
   lead,
+  motif,
   children,
 }: {
   title: string;
   lead?: string;
+  motif?: MotifKind;
   children?: ReactNode;
 }) {
   return (
@@ -20,11 +23,21 @@ export default function PageHero({
         <div className="edge-light absolute inset-0" />
       </div>
 
-      <div className="relative z-[2] mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-24 md:pt-36">
-        <h1 className="max-w-3xl text-4xl font-bold text-white md:text-6xl">{title}</h1>
-        <div className="mt-8 h-px w-40 neon-rule" aria-hidden="true" />
-        {lead && <p className="mt-6 max-w-xl text-lg text-white/55">{lead}</p>}
-        {children}
+      <div
+        className={`relative z-[2] mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-24 md:pt-36 ${
+          motif ? "grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]" : ""
+        }`}
+      >
+        <div>
+          <h1 className="max-w-3xl text-4xl font-bold text-white md:text-6xl">{title}</h1>
+          <div className="mt-8 h-px w-40 neon-rule" aria-hidden="true" />
+          {lead && <p className="mt-6 max-w-xl text-lg text-white/55">{lead}</p>}
+          {children}
+        </div>
+
+        {motif && (
+          <IsoMotif kind={motif} className="hidden aspect-[7/6] w-full max-w-[440px] lg:block" />
+        )}
       </div>
     </section>
   );

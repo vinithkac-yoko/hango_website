@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageHero title="Marketing retainers and one-time projects, priced to fit." />
+      <PageHero
+        title="Marketing retainers and one-time projects, priced to fit."
+        motif="layers"
+      />
 
       <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
         <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />

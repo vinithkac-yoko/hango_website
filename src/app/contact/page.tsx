@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact-form";
+import IsoMotif from "@/components/iso/iso-motif";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -48,6 +49,11 @@ export default function ContactPage() {
               </dd>
             </div>
           </dl>
+
+          <IsoMotif
+            kind="signal"
+            className="mt-8 hidden aspect-[7/6] w-full max-w-[300px] lg:block"
+          />
         </div>
 
         <div className="rounded-[18px] border border-white/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm">

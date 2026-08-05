@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <PageHero title="To hang high is the point.">
+      <PageHero title="To hang high is the point." motif="ascend">
         <div className="mt-8 max-w-2xl space-y-5 text-lg text-white/60">
           {about.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>

@@ -15,6 +15,7 @@ export default function InternshipsPage() {
       <PageHero
         title="Real client work. A real certificate."
         lead="For 2nd year and final year college students — work on an actual client project and receive a certificate for it."
+        motif="certificate"
       />
 
       <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
