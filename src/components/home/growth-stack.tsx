@@ -1,15 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import { MagneticLink } from "@/components/motion/magnetic";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+/** Slight overshoot so the red reads as a "pop", not a fade. */
+const POP = { type: "spring", stiffness: 460, damping: 24, mass: 0.55 } as const;
 
 export default function GrowthStack({
   pillars,
 }: {
   pillars: readonly { title: string; description: string }[];
 }) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
     <section className="relative overflow-hidden bg-brand-black py-20 text-white md:py-28">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
@@ -19,7 +24,6 @@ export default function GrowthStack({
         style={{ background: "radial-gradient(circle, rgba(251,54,64,0.16) 0%, transparent 65%)" }}
       />
 
-      {/* Section rises up as a whole */}
       <motion.div
         className="relative mx-auto max-w-6xl px-6"
         initial={{ opacity: 0, y: 64 }}
@@ -34,41 +38,97 @@ export default function GrowthStack({
         </p>
 
         <div className="mt-12 border-t border-white/10">
-          {pillars.map((pillar, i) => (
-            <motion.div
-              key={pillar.title}
-              data-cursor="card"
-              className="group relative grid items-baseline gap-3 border-b border-white/10 py-8 transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:py-10 md:grid-cols-[1fr_2fr_auto] md:gap-12"
-              initial={{ opacity: 0, y: 34 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.65, delay: i * 0.07, ease: EASE }}
-            >
-              <span className="pointer-events-none absolute inset-0 -mx-5 rounded-[14px] bg-white/0 transition-colors duration-500 group-hover:bg-white/[0.045]" />
-              <span className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-brand-red transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-
-              <h3 className="relative text-xl font-semibold transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
-                {pillar.title}
-              </h3>
-
-              <p className="relative max-w-2xl text-white/55 transition-colors duration-500 group-hover:text-white/85">
-                {pillar.description}
-              </p>
-
-              {/* Arrow fades in from the left edge on hover */}
-              <span
-                aria-hidden="true"
-                className="relative hidden -translate-x-2 text-brand-red opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100 md:block"
+          {pillars.map((pillar, i) => {
+            const on = hovered === i;
+            return (
+              <motion.div
+                key={pillar.title}
+                data-cursor="card"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                className="group relative grid items-baseline gap-3 border-b border-white/10 py-8 md:grid-cols-[1fr_2fr_auto] md:gap-12"
+                initial={{ opacity: 0, y: 34 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.65, delay: i * 0.07, ease: EASE }}
               >
-                <svg viewBox="0 0 20 20" className="h-5 w-5">
-                  <path
-                    fill="currentColor"
-                    d="M11.3 4.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H3a1 1 0 1 1 0-2h11.6l-3.3-3.3a1 1 0 0 1 0-1.4Z"
-                  />
-                </svg>
-              </span>
-            </motion.div>
-          ))}
+                {/* Red wash pops in behind the row */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 -mx-5 rounded-[14px]"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, rgba(251,54,64,0.22) 0%, rgba(251,54,64,0.08) 42%, rgba(251,54,64,0) 78%)",
+                  }}
+                  initial={false}
+                  animate={on ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.965 }}
+                  transition={POP}
+                />
+
+                {/* Neon edge snaps up at the left */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -left-5 top-1/2 h-14 w-[3px] rounded-full bg-brand-red"
+                  style={{ y: "-50%", boxShadow: "0 0 16px rgba(251,54,64,0.9)" }}
+                  initial={false}
+                  animate={on ? { scaleY: 1, opacity: 1 } : { scaleY: 0, opacity: 0 }}
+                  transition={POP}
+                />
+
+                {/* Rule along the bottom fills in */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left bg-brand-red"
+                  style={{ boxShadow: "0 0 10px rgba(251,54,64,0.8)" }}
+                  initial={false}
+                  animate={on ? { scaleX: 1 } : { scaleX: 0 }}
+                  transition={{ duration: 0.55, ease: EASE }}
+                />
+
+                <motion.h3
+                  className="relative text-xl font-semibold"
+                  initial={false}
+                  animate={
+                    on
+                      ? {
+                          x: 12,
+                          color: "#fb3640",
+                          textShadow: "0 0 18px rgba(251,54,64,0.55)",
+                        }
+                      : { x: 0, color: "#ffffff", textShadow: "0 0 0px rgba(251,54,64,0)" }
+                  }
+                  transition={POP}
+                >
+                  {pillar.title}
+                </motion.h3>
+
+                <motion.p
+                  className="relative max-w-2xl"
+                  initial={false}
+                  animate={on ? { color: "rgba(255,255,255,0.88)" } : { color: "rgba(255,255,255,0.55)" }}
+                  transition={{ duration: 0.35, ease: EASE }}
+                >
+                  {pillar.description}
+                </motion.p>
+
+                <motion.span
+                  aria-hidden="true"
+                  className="relative hidden text-brand-red md:block"
+                  initial={false}
+                  animate={on ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -10, scale: 0.7 }}
+                  transition={POP}
+                  style={{ filter: "drop-shadow(0 0 8px rgba(251,54,64,0.8))" }}
+                >
+                  <svg viewBox="0 0 20 20" className="h-5 w-5">
+                    <path
+                      fill="currentColor"
+                      d="M11.3 4.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H3a1 1 0 1 1 0-2h11.6l-3.3-3.3a1 1 0 0 1 0-1.4Z"
+                    />
+                  </svg>
+                </motion.span>
+              </motion.div>
+            );
+          })}
         </div>
 
         <div className="mt-12">
