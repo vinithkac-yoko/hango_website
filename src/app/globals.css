@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #14110b;
+  /* The site is dark end to end, so the page canvas is too — this is what
+     shows through on overscroll and before first paint. */
+  --background: #0b0906;
+  --foreground: #ffffff;
 
   /* Radius scale */
   --radius-sm: 12px;

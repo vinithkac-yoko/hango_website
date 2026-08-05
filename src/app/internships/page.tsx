@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageHero from "@/components/layout/page-hero";
 import { internshipPrograms, collegeTieUp } from "@/data/internships";
 
 export const metadata: Metadata = {
@@ -11,47 +12,62 @@ export const metadata: Metadata = {
 export default function InternshipsPage() {
   return (
     <>
-      <section className="border-b border-black/10 bg-brand-cream">
-        <div className="mx-auto max-w-6xl px-6 pb-20 pt-32 md:pb-28 md:pt-36">
-          <h1 className="max-w-2xl text-4xl font-bold text-brand-black md:text-6xl">
-            Real client work. A real certificate.
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-brand-black/70">
-            For 2nd year and final year college students — work on an actual client project
-            and receive a certificate for it.
-          </p>
+      <PageHero
+        title="Real client work. A real certificate."
+        lead="For 2nd year and final year college students — work on an actual client project and receive a certificate for it."
+      />
+
+      <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            {internshipPrograms.map((program) => (
+              <div
+                key={program.slug}
+                data-cursor="card"
+                className="group rounded-[18px] border border-white/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-brand-red/50"
+              >
+                <p
+                  className="text-sm font-semibold text-brand-red"
+                  style={{ textShadow: "0 0 12px rgba(251,54,64,0.45)" }}
+                >
+                  {program.duration}
+                </p>
+                <h2 className="mt-2 text-xl font-semibold text-white">{program.title}</h2>
+                <p className="mt-1 text-sm text-white/45">{program.audience}</p>
+                <p className="mt-4 text-white/65">{program.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="neon-edge mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-white"
+            data-cursor="card"
+          >
+            <h2 className="text-xl font-semibold">{collegeTieUp.title}</h2>
+            <p className="mt-3 max-w-2xl text-white/65">{collegeTieUp.description}</p>
+            <Link href="/contact" className="btn-primary mt-6">
+              Discuss a partnership
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-        <div className="grid gap-6 md:grid-cols-2">
-          {internshipPrograms.map((program) => (
-            <div key={program.slug} className="rounded-[18px] border border-black/15 p-8">
-              <p className="text-sm font-semibold text-brand-red">{program.duration}</p>
-              <h2 className="mt-2 text-xl font-semibold text-brand-black">{program.title}</h2>
-              <p className="mt-1 text-sm text-brand-black/50">{program.audience}</p>
-              <p className="mt-4 text-brand-black/70">{program.description}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-white">
-          <h2 className="text-xl font-semibold">{collegeTieUp.title}</h2>
-          <p className="mt-3 max-w-2xl text-white/70">{collegeTieUp.description}</p>
-          <Link href="/contact" className="btn-primary mt-6">
-            Discuss a partnership
+      <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-24 md:py-32">
+        <div
+          className="orb-c pointer-events-none absolute left-1/3 top-1/2 h-[44vw] w-[44vw] -translate-y-1/2 rounded-full blur-3xl"
+          aria-hidden="true"
+          style={{ background: "radial-gradient(circle, rgba(251,54,64,0.13) 0%, transparent 66%)" }}
+        />
+        <div className="relative mx-auto max-w-6xl px-6">
+          <h2 className="text-3xl font-bold text-white md:text-5xl">Ready to apply?</h2>
+          <p className="mt-4 max-w-xl text-white/55">
+            Reach out with your college, department of interest, and preferred duration.
+          </p>
+          <Link href="/contact" className="btn-primary mt-8">
+            Apply now
           </Link>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 pb-24 md:pb-32">
-        <h2 className="text-3xl font-bold text-brand-black md:text-5xl">Ready to apply?</h2>
-        <p className="mt-4 max-w-xl text-brand-black/60">
-          Reach out with your college, department of interest, and preferred duration.
-        </p>
-        <Link href="/contact" className="btn-primary mt-8">
-          Apply now
-        </Link>
       </section>
     </>
   );

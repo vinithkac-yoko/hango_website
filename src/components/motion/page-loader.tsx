@@ -44,7 +44,7 @@ export default function PageLoader() {
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-white"
+          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[var(--color-surface-0)]"
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.5, ease: EASE }}
           aria-hidden="true"
@@ -73,7 +73,7 @@ export default function PageLoader() {
             />
           </svg>
 
-          <div className="mt-8 h-[2px] w-32 overflow-hidden rounded-full bg-black/10">
+          <div className="mt-8 h-[2px] w-32 overflow-hidden rounded-full bg-white/10">
             <motion.div
               className="h-full bg-brand-red"
               initial={{ scaleX: 0 }}

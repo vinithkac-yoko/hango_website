@@ -16,9 +16,9 @@ export default function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
-  // The homepage is dark end to end, so the bar inverts there — transparent
-  // over the hero, then dark glass once it lifts off.
-  const onDarkPage = pathname === "/";
+  // Every page is dark, so the bar is transparent over the hero and turns to
+  // dark glass once it lifts off. Kept as a flag in case a light page returns.
+  const onDarkPage = true;
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
