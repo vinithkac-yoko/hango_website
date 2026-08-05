@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/layout/page-hero";
+import MorphField from "@/components/motion/morph-field";
 import {
   about,
   mission,
@@ -43,6 +44,7 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-white md:py-28">
+        <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">What we hold to</h2>
 

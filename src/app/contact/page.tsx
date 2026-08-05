@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact-form";
 import IsoMotif from "@/components/iso/iso-motif";
+import MorphField from "@/components/motion/morph-field";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -56,7 +57,11 @@ export default function ContactPage() {
           />
         </div>
 
-        <div className="rounded-[18px] border border-white/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm">
+        <div className="relative rounded-[18px] border border-white/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm">
+          <MorphField
+            className="pointer-events-none absolute -right-6 -top-6 hidden opacity-50 md:block"
+            size={80}
+          />
           <ContactForm />
         </div>
       </div>

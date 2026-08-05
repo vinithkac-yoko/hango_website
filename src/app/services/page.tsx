@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/layout/page-hero";
+import MorphField from "@/components/motion/morph-field";
 import { retainerService, projectServices } from "@/data/services";
 
 export const metadata: Metadata = {
@@ -67,6 +68,7 @@ export default function ServicesPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-white md:py-28">
+        <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold md:text-3xl">One-Time Services</h2>
           <p className="mt-2 max-w-2xl text-white/55">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/layout/page-hero";
+import MorphField from "@/components/motion/morph-field";
 import { internshipPrograms, collegeTieUp } from "@/data/internships";
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default function InternshipsPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-24 md:py-32">
+        <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-white md:text-5xl">Ready to apply?</h2>
           <p className="mt-4 max-w-xl text-white/55">

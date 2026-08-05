@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { MagneticLink } from "@/components/motion/magnetic";
+import MorphField from "@/components/motion/morph-field";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slight overshoot so the red reads as a "pop", not a fade. */
@@ -18,6 +19,7 @@ export default function GrowthStack({
   return (
     <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+      <MorphField className="pointer-events-none absolute right-10 top-14 hidden opacity-60 lg:block" />
 
       <motion.div
         className="relative mx-auto max-w-6xl px-6"
