@@ -3,10 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import Logo from "@/components/ui/logo";
+import ThemeToggle from "@/components/ui/theme-toggle";
 import { MagneticLink } from "@/components/motion/magnetic";
 import { siteConfig } from "@/lib/site-config";
+import { useMounted } from "@/lib/use-mounted";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -15,10 +18,13 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { scrollY } = useScroll();
+  const { resolvedTheme } = useTheme();
+  const mounted = useMounted();
 
-  // Every page is dark, so the bar is transparent over the hero and turns to
-  // dark glass once it lifts off. Kept as a flag in case a light page returns.
-  const onDarkPage = true;
+  // Bar styling adapts to the active theme: transparent over the hero,
+  // glass once scrolled. Defaults to the dark reading before mount, since
+  // "dark" is ThemeProvider's defaultTheme too.
+  const onDarkPage = mounted ? resolvedTheme !== "light" : true;
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
@@ -83,40 +89,44 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-4 md:flex">
+          <ThemeToggle />
           <MagneticLink href="/contact" className="btn-primary" arrow>
             Get a Quote
           </MagneticLink>
         </div>
 
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className={`flex h-10 w-10 cursor-pointer items-center justify-center transition-colors duration-500 md:hidden ${
-            onDarkPage ? "text-white" : "text-brand-black"
-          }`}
-        >
-          <span className="sr-only">Toggle menu</span>
-          <div className="flex flex-col gap-1.5">
-            <motion.span
-              className="block h-0.5 w-6 bg-current"
-              animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.3, ease: EASE }}
-            />
-            <motion.span
-              className="block h-0.5 w-6 bg-current"
-              animate={open ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span
-              className="block h-0.5 w-6 bg-current"
-              animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.3, ease: EASE }}
-            />
-          </div>
-        </button>
+        <div className="flex items-center gap-3 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className={`flex h-10 w-10 cursor-pointer items-center justify-center transition-colors duration-500 ${
+              onDarkPage ? "text-white" : "text-brand-black"
+            }`}
+          >
+            <span className="sr-only">Toggle menu</span>
+            <div className="flex flex-col gap-1.5">
+              <motion.span
+                className="block h-0.5 w-6 bg-current"
+                animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3, ease: EASE }}
+              />
+              <motion.span
+                className="block h-0.5 w-6 bg-current"
+                animate={open ? { opacity: 0 } : { opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span
+                className="block h-0.5 w-6 bg-current"
+                animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3, ease: EASE }}
+              />
+            </div>
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

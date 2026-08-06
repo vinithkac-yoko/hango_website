@@ -7,6 +7,7 @@ import PageLoader from "@/components/motion/page-loader";
 import { Spotlight, Grain, ScrollProgress, EasterEggs } from "@/components/motion/ambient";
 import MotionProvider from "@/components/motion/motion-provider";
 import LenisProvider from "@/components/motion/lenis-provider";
+import ThemeProvider from "@/components/motion/theme-provider";
 import "./globals.css";
 
 const arimo = Arimo({
@@ -35,29 +36,32 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${arimo.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <MotionProvider>
-          <LenisProvider>
-            <PageLoader />
-            <ScrollProgress />
-            <Spotlight />
-            <Grain />
-            <EasterEggs />
-            <Cursor />
-            <a
-              href="#main"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10001] focus:rounded-[12px] focus:bg-brand-red focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
-            >
-              Skip to content
-            </a>
-            <Header />
-            <main id="main" className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </LenisProvider>
-        </MotionProvider>
+        <ThemeProvider>
+          <MotionProvider>
+            <LenisProvider>
+              <PageLoader />
+              <ScrollProgress />
+              <Spotlight />
+              <Grain />
+              <EasterEggs />
+              <Cursor />
+              <a
+                href="#main"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10001] focus:rounded-[12px] focus:bg-brand-red focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+              >
+                Skip to content
+              </a>
+              <Header />
+              <main id="main" className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </LenisProvider>
+          </MotionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

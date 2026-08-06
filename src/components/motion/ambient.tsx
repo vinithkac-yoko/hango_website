@@ -57,7 +57,7 @@ export function Spotlight() {
         opacity: 0.12,
         mixBlendMode: "soft-light",
         background:
-          "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 32%, rgba(255,255,255,0) 68%)",
+          "radial-gradient(circle, rgba(var(--spotlight-rgb),0.95) 0%, rgba(var(--spotlight-rgb),0.5) 32%, rgba(var(--spotlight-rgb),0) 68%)",
       }}
     />
   );

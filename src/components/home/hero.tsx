@@ -148,7 +148,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
         <div>
           <div ref={headlineOuterRef}>
             <motion.h1
-              className="max-w-3xl text-5xl font-bold text-white md:text-[5rem] md:leading-[0.95]"
+              className="max-w-3xl text-5xl font-bold text-ink md:text-[5rem] md:leading-[0.95]"
               style={{ x: headX, y: headY }}
             >
               {HEADLINE_LINES.map((line, li) => (
@@ -176,7 +176,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
             />
 
             <motion.p
-              className="mt-6 max-w-2xl text-xl font-medium text-white md:text-2xl"
+              className="mt-6 max-w-2xl text-xl font-medium text-ink md:text-2xl"
               style={{ x: paraX, y: paraY }}
               initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.6 }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
@@ -186,7 +186,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
             </motion.p>
 
             <motion.p
-              className="mt-4 max-w-xl text-white/55"
+              className="mt-4 max-w-xl text-ink/55"
               style={{ x: paraX, y: paraY }}
               initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.5 }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
@@ -239,7 +239,7 @@ function ScrollCue({ delay }: { delay: number }) {
       transition={{ duration: 0.6, delay }}
       aria-hidden="true"
     >
-      <div className="flex h-9 w-[22px] items-start justify-center rounded-full border border-white/25 p-1.5">
+      <div className="flex h-9 w-[22px] items-start justify-center rounded-full border border-ink/25 p-1.5">
         <motion.span
           className="block h-1.5 w-1 rounded-full bg-brand-red"
           style={{ boxShadow: "0 0 10px rgba(251,54,64,0.9)" }}
@@ -247,7 +247,7 @@ function ScrollCue({ delay }: { delay: number }) {
           transition={{ duration: 1.9, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
-      <span className="text-xs font-medium tracking-wide text-white/35">Scroll to Explore</span>
+      <span className="text-xs font-medium tracking-wide text-ink/35">Scroll to Explore</span>
     </motion.div>
   );
 }

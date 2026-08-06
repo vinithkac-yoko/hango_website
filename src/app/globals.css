@@ -1,10 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* The site is dark end to end, so the page canvas is too — this is what
-     shows through on overscroll and before first paint. */
+  /* Dark is the default/brand-forward theme — this is what shows through on
+     overscroll and before first paint. .light below overrides every token
+     here once next-themes puts that class on <html>. */
   --background: #0b0906;
   --foreground: #ffffff;
+  --ink: #ffffff;
+
+  /* Dark surfaces are the brand cream (#FFF2D1) taken down to near-black, so
+     the dark theme reads warm/beige rather than green. */
+  --surface-0: #0b0906;
+  --surface-1: #12100a;
+  --surface-2: #1b1710;
+  --surface-line: #2b2519;
+
+  /* Hairline/grid colors, as an rgb triplet so it can feed rgba(var(),a). */
+  --grid-rgb: 255, 242, 209;
+  --spotlight-rgb: 255, 255, 255;
+
+  /* Neumorphic shadow pair (dark-side, light-side) for the theme toggle. */
+  --neu-dark: rgba(0, 0, 0, 0.5);
+  --neu-light: rgba(255, 255, 255, 0.05);
 
   /* Radius scale */
   --radius-sm: 12px;
@@ -24,27 +41,46 @@
   --dur-slow: 0.8s;
 }
 
+/* Light theme — same brand palette (red/cream/black/white), just built on a
+   bright cream canvas instead of a near-black one. */
+.light {
+  --background: #fdf8ec;
+  --foreground: #14110b;
+  --ink: #14110b;
+
+  --surface-0: #fdf8ec;
+  --surface-1: #fbf0d9;
+  --surface-2: #f6e6c4;
+  --surface-line: #e6d8b8;
+
+  --grid-rgb: 20, 17, 11;
+  --spotlight-rgb: 20, 17, 11;
+
+  --neu-dark: rgba(20, 17, 11, 0.18);
+  --neu-light: rgba(255, 255, 255, 0.9);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
   --font-sans: var(--font-arimo);
   --font-display: var(--font-space-grotesk);
 
   /* Hango brand palette. The dark is a warm near-black rather than the
      green-tinted #000F08 from the original spec, which cast the whole UI
-     green when used at scale. */
+     green when used at scale. Fixed across both themes — brand color, not
+     a surface token. */
   --color-brand-red: #fb3640;
   --color-brand-red-dark: #d92730;
   --color-brand-cream: #fff2d1;
   --color-brand-black: #14110b;
   --color-brand-white: #ffffff;
 
-  /* Dark surfaces are the brand cream (#FFF2D1) taken down to near-black, so
-     the dark theme reads warm/beige rather than green. */
-  --color-surface-0: #0b0906;
-  --color-surface-1: #12100a;
-  --color-surface-2: #1b1710;
-  --color-surface-line: #2b2519;
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-line: var(--surface-line);
 
   --radius-brand: var(--radius-lg);
 }
@@ -78,8 +114,8 @@
    reads as engineered structure rather than haze. */
 .circuit-floor {
   background-image:
-    linear-gradient(to right, rgba(255, 242, 209, 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 242, 209, 0.055) 1px, transparent 1px);
+    linear-gradient(to right, rgba(var(--grid-rgb), 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--grid-rgb), 0.055) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
 }
@@ -99,10 +135,17 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 242, 209, 0.12) 20%,
-    rgba(255, 242, 209, 0.12) 80%,
+    rgba(var(--grid-rgb), 0.12) 20%,
+    rgba(var(--grid-rgb), 0.12) 80%,
     transparent
   );
+}
+
+:root {
+  color-scheme: dark;
+}
+.light {
+  color-scheme: light;
 }
 
 body {
@@ -200,10 +243,10 @@ body {
     transform: scaleY(1);
   }
   .btn-secondary-invert {
-    @apply border border-white/25 text-white;
+    @apply border border-ink/25 text-ink;
   }
   .btn-secondary-invert:hover {
-    @apply border-white/60 bg-white/10;
+    @apply border-ink/60 bg-ink/10;
   }
 
   /* Animated underline for nav links */
@@ -243,8 +286,8 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 242, 209, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 242, 209, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(var(--grid-rgb), 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--grid-rgb), 0.04) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
@@ -361,6 +404,29 @@ body {
   color: transparent;
   animation: sheen 8s ease-in-out infinite;
   will-change: background-position;
+}
+
+/* Neumorphic theme toggle: the track sits in a pressed-in groove, the thumb
+   pops out of the surface — both shadows swap with the theme automatically. */
+.theme-toggle {
+  background: var(--color-surface-1);
+  box-shadow:
+    inset 3px 3px 7px var(--neu-dark),
+    inset -3px -3px 7px var(--neu-light);
+  transition:
+    background-color var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-out-expo);
+}
+
+.theme-toggle-thumb {
+  background: var(--color-surface-2);
+  box-shadow:
+    2px 2px 5px var(--neu-dark),
+    -2px -2px 5px var(--neu-light),
+    0 0 0 1px rgba(251, 54, 64, 0.12);
+  transition:
+    background-color var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-out-expo);
 }
 
 @media (prefers-reduced-motion: reduce) {

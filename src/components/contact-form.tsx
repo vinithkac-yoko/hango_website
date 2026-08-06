@@ -23,7 +23,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label htmlFor="name" className="text-sm font-medium text-white">
+        <label htmlFor="name" className="text-sm font-medium text-ink">
           Name
         </label>
         <input
@@ -31,12 +31,12 @@ export default function ContactForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="text-sm font-medium text-white">
+        <label htmlFor="email" className="text-sm font-medium text-ink">
           Email
         </label>
         <input
@@ -45,12 +45,12 @@ export default function ContactForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 
       <div>
-        <label htmlFor="message" className="text-sm font-medium text-white">
+        <label htmlFor="message" className="text-sm font-medium text-ink">
           How can we help?
         </label>
         <textarea
@@ -59,7 +59,7 @@ export default function ContactForm() {
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
         />
       </div>
 

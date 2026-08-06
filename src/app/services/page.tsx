@@ -21,9 +21,9 @@ export default function ServicesPage() {
       <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
         <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-6">
-          <h2 className="text-2xl font-bold text-white md:text-3xl">{retainerService.title}</h2>
-          <p className="mt-2 max-w-2xl text-white/55">{retainerService.description}</p>
-          <p className="mt-3 max-w-2xl text-sm text-white/35">
+          <h2 className="text-2xl font-bold text-ink md:text-3xl">{retainerService.title}</h2>
+          <p className="mt-2 max-w-2xl text-ink/55">{retainerService.description}</p>
+          <p className="mt-3 max-w-2xl text-sm text-ink/35">
             {retainerService.includes.join(" · ")}
           </p>
 
@@ -35,12 +35,12 @@ export default function ServicesPage() {
                 className={`flex flex-col rounded-[18px] bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 ${
                   i === 1
                     ? "border border-brand-red/70 shadow-[0_0_28px_rgba(251,54,64,0.18)]"
-                    : "border border-white/10 hover:border-white/25"
+                    : "border border-ink/10 hover:border-ink/25"
                 }`}
               >
-                <h3 className="text-lg font-semibold text-white">{tier.name}</h3>
-                <p className="mt-1 text-sm text-white/45">Contact us for pricing</p>
-                <ul className="mt-6 flex-1 space-y-3 text-sm text-white/70">
+                <h3 className="text-lg font-semibold text-ink">{tier.name}</h3>
+                <p className="mt-1 text-sm text-ink/45">Contact us for pricing</p>
+                <ul className="mt-6 flex-1 space-y-3 text-sm text-ink/70">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2">
                       <span
@@ -67,15 +67,15 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-white md:py-28">
+      <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-ink md:py-28">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold md:text-3xl">One-Time Services</h2>
-          <p className="mt-2 max-w-2xl text-white/55">
+          <p className="mt-2 max-w-2xl text-ink/55">
             Fixed packages for standard jobs, custom quotes for larger projects.
           </p>
 
-          <div className="mt-12 divide-y divide-white/10 border-t border-white/10">
+          <div className="mt-12 divide-y divide-ink/10 border-t border-ink/10">
             {projectServices.map((service) => (
               <div
                 key={service.slug}
@@ -87,8 +87,8 @@ export default function ServicesPage() {
                   {service.title}
                 </h3>
                 <div className="relative">
-                  <p className="text-white/60">{service.description}</p>
-                  <p className="mt-1.5 text-sm text-white/30">{service.includes.join(" · ")}</p>
+                  <p className="text-ink/60">{service.description}</p>
+                  <p className="mt-1.5 text-sm text-ink/30">{service.includes.join(" · ")}</p>
                 </div>
                 <p className="relative whitespace-nowrap text-sm text-brand-red md:text-right">
                   {service.pricingNote}
@@ -102,8 +102,8 @@ export default function ServicesPage() {
       <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-24 md:py-32">
         <div className="circuit-floor pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-6">
-          <h2 className="text-3xl font-bold text-white md:text-5xl">Not sure what you need?</h2>
-          <p className="mt-4 max-w-xl text-white/55">
+          <h2 className="text-3xl font-bold text-ink md:text-5xl">Not sure what you need?</h2>
+          <p className="mt-4 max-w-xl text-ink/55">
             Book a consultation and we&apos;ll recommend the right package for your business.
           </p>
           <Link href="/contact" className="btn-primary mt-8">

@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
+import { useInkColor } from "@/lib/use-ink-color";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slight overshoot so the red reads as a "pop", not a fade — matches Growth Stack. */
@@ -25,6 +26,7 @@ export default function Values({
   const quoteRef = useRef<HTMLHeadingElement>(null);
   const [hovered, setHovered] = useState<number | null>(null);
   const [scrollActive, setScrollActive] = useState<number | null>(null);
+  const ink = useInkColor();
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -126,7 +128,7 @@ export default function Values({
         {/* Editorial quote — words build in as the section is pinned */}
         <motion.h2
           ref={quoteRef}
-          className="text-2xl font-medium text-white md:text-3xl"
+          className="text-2xl font-medium text-ink md:text-3xl"
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
           &ldquo;{quote}&rdquo;
@@ -134,7 +136,7 @@ export default function Values({
 
         {/* Value list — one card highlights per scroll stage, mouse hover still works too */}
         <motion.ul
-          className="rounded-[18px] border-t border-white/10 pt-6"
+          className="rounded-[18px] border-t border-ink/10 pt-6"
           style={{ boxShadow }}
         >
           {items.map((value, i) => {
@@ -145,7 +147,7 @@ export default function Values({
                 data-cursor="card"
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
-                className="group relative border-b border-white/10 py-6"
+                className="group relative border-b border-ink/10 py-6"
               >
                 {/* Red wash pops in behind the card */}
                 <motion.span
@@ -186,7 +188,7 @@ export default function Values({
                   animate={
                     on
                       ? { x: 10, color: "#fb3640", textShadow: "0 0 18px rgba(251,54,64,0.55)" }
-                      : { x: 0, color: "#ffffff", textShadow: "0 0 0px rgba(251,54,64,0)" }
+                      : { x: 0, color: ink.hex, textShadow: "0 0 0px rgba(251,54,64,0)" }
                   }
                   transition={POP}
                 >
@@ -196,7 +198,7 @@ export default function Values({
                 <motion.p
                   className="relative mt-1"
                   initial={false}
-                  animate={on ? { color: "rgba(255,255,255,0.88)" } : { color: "rgba(255,255,255,0.55)" }}
+                  animate={on ? { color: `rgba(${ink.rgb},0.88)` } : { color: `rgba(${ink.rgb},0.55)` }}
                   transition={{ duration: 0.35, ease: EASE }}
                 >
                   {value.description}
@@ -222,10 +224,10 @@ export function ClosingCta() {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.9, ease: EASE }}
       >
-        <h2 className="max-w-2xl text-3xl font-bold text-white md:text-5xl">
+        <h2 className="max-w-2xl text-3xl font-bold text-ink md:text-5xl">
           Ready to grow with Hango?
         </h2>
-        <p className="mt-4 max-w-xl text-white/55">
+        <p className="mt-4 max-w-xl text-ink/55">
           Tell us about your business and we&apos;ll put together a plan.
         </p>
         <div className="mt-8">

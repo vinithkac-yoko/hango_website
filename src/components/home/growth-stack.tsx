@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
 import MorphField from "@/components/motion/morph-field";
+import { useInkColor } from "@/lib/use-ink-color";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slight overshoot so the red reads as a "pop", not a fade. */
@@ -21,6 +22,7 @@ export default function GrowthStack({
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const ink = useInkColor();
 
   // Pinned services scene: one pillar "activates" per scroll stage, using
   // the same red-pop treatment mouse hover already triggers elsewhere.
@@ -55,19 +57,19 @@ export default function GrowthStack({
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28"
+      className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-ink md:py-28"
     >
       <div ref={gridRef} className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <MorphField className="pointer-events-none absolute right-10 top-14 hidden opacity-60 lg:block" />
 
       <div ref={contentRef} className="relative mx-auto max-w-6xl px-6">
         <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">The Growth Stack</h2>
-        <p className="mt-4 max-w-xl text-white/60">
+        <p className="mt-4 max-w-xl text-ink/60">
           Every pillar supports and amplifies the others, built as one integrated system — not
           services sold in isolation.
         </p>
 
-        <div className="mt-12 border-t border-white/10">
+        <div className="mt-12 border-t border-ink/10">
           {pillars.map((pillar, i) => {
             const on = hovered === i || scrollActive === i;
             return (
@@ -76,7 +78,7 @@ export default function GrowthStack({
                 data-cursor="card"
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
-                className="group relative grid items-baseline gap-3 border-b border-white/10 py-8 md:grid-cols-[1fr_2fr_auto] md:gap-12"
+                className="group relative grid items-baseline gap-3 border-b border-ink/10 py-8 md:grid-cols-[1fr_2fr_auto] md:gap-12"
               >
                 {/* Red wash pops in behind the row */}
                 <motion.span
@@ -121,7 +123,7 @@ export default function GrowthStack({
                           color: "#fb3640",
                           textShadow: "0 0 18px rgba(251,54,64,0.55)",
                         }
-                      : { x: 0, color: "#ffffff", textShadow: "0 0 0px rgba(251,54,64,0)" }
+                      : { x: 0, color: ink.hex, textShadow: "0 0 0px rgba(251,54,64,0)" }
                   }
                   transition={POP}
                 >
@@ -131,7 +133,7 @@ export default function GrowthStack({
                 <motion.p
                   className="relative max-w-2xl"
                   initial={false}
-                  animate={on ? { color: "rgba(255,255,255,0.88)" } : { color: "rgba(255,255,255,0.55)" }}
+                  animate={on ? { color: `rgba(${ink.rgb},0.88)` } : { color: `rgba(${ink.rgb},0.55)` }}
                   transition={{ duration: 0.35, ease: EASE }}
                 >
                   {pillar.description}

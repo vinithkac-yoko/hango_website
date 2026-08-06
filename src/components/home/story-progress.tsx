@@ -47,7 +47,7 @@ export default function StoryProgress({
       className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
       aria-hidden="true"
     >
-      <div className="relative h-44 w-[3px] rounded-full bg-white/10">
+      <div className="relative h-44 w-[3px] rounded-full bg-ink/10">
         <motion.div
           className="absolute inset-x-0 top-0 origin-top rounded-full bg-brand-red"
           style={{ scaleY, height: "100%", boxShadow: "0 0 12px rgba(251,54,64,0.85)" }}
@@ -55,7 +55,7 @@ export default function StoryProgress({
         {labels.map((label, i) => (
           <span
             key={label}
-            className="absolute right-0 h-1.5 w-1.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-white/25"
+            className="absolute right-0 h-1.5 w-1.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-ink/25"
             style={{ top: `${(i / (labels.length - 1)) * 100}%` }}
           />
         ))}

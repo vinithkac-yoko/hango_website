@@ -27,7 +27,7 @@ export default function InternshipsPage() {
               <div
                 key={program.slug}
                 data-cursor="card"
-                className="group rounded-[18px] border border-white/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-brand-red/50"
+                className="group rounded-[18px] border border-ink/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-brand-red/50"
               >
                 <p
                   className="text-sm font-semibold text-brand-red"
@@ -35,19 +35,19 @@ export default function InternshipsPage() {
                 >
                   {program.duration}
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-white">{program.title}</h2>
-                <p className="mt-1 text-sm text-white/45">{program.audience}</p>
-                <p className="mt-4 text-white/65">{program.description}</p>
+                <h2 className="mt-2 text-xl font-semibold text-ink">{program.title}</h2>
+                <p className="mt-1 text-sm text-ink/45">{program.audience}</p>
+                <p className="mt-4 text-ink/65">{program.description}</p>
               </div>
             ))}
           </div>
 
           <div
-            className="neon-edge mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-white"
+            className="neon-edge mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-ink"
             data-cursor="card"
           >
             <h2 className="text-xl font-semibold">{collegeTieUp.title}</h2>
-            <p className="mt-3 max-w-2xl text-white/65">{collegeTieUp.description}</p>
+            <p className="mt-3 max-w-2xl text-ink/65">{collegeTieUp.description}</p>
             <Link href="/contact" className="btn-primary mt-6">
               Discuss a partnership
             </Link>
@@ -58,8 +58,8 @@ export default function InternshipsPage() {
       <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-24 md:py-32">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
-          <h2 className="text-3xl font-bold text-white md:text-5xl">Ready to apply?</h2>
-          <p className="mt-4 max-w-xl text-white/55">
+          <h2 className="text-3xl font-bold text-ink md:text-5xl">Ready to apply?</h2>
+          <p className="mt-4 max-w-xl text-ink/55">
             Reach out with your college, department of interest, and preferred duration.
           </p>
           <Link href="/contact" className="btn-primary mt-8">
