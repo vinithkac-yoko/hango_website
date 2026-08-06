@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
@@ -8,6 +8,8 @@ import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+/** Slight overshoot so the red reads as a "pop", not a fade — matches Growth Stack. */
+const POP = { type: "spring", stiffness: 460, damping: 24, mass: 0.55 } as const;
 
 export default function Values({
   quote,
@@ -21,7 +23,8 @@ export default function Values({
   const contentRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLHeadingElement>(null);
-  const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [scrollActive, setScrollActive] = useState<number | null>(null);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -52,12 +55,13 @@ export default function Values({
   }
 
   // Pinned quote scene: the quote builds word by word, then each value
-  // card steps in on its own beat, all scrubbed to scroll position.
-  // The split runs synchronously in this same effect (not via a
-  // state-driven hook) so this section's ScrollTrigger registers in the
-  // same pass as Hero's and Growth Stack's — otherwise it lands one
-  // render late, after its siblings have already measured the page and
-  // gotten the wrong pin positions for it.
+  // card gets its own scroll stage — highlighted one at a time (the same
+  // red-pop treatment Growth Stack uses for its pillars), not all three
+  // fading in together. The split runs synchronously in this same effect
+  // (not via a state-driven hook) so this section's ScrollTrigger
+  // registers in the same pass as Hero's and Growth Stack's — otherwise
+  // it lands one render late, after its siblings have already measured
+  // the page and gotten the wrong pin positions for it.
   useGSAP(
     () => {
       if (!sectionRef.current || !quoteRef.current) return;
@@ -67,30 +71,33 @@ export default function Values({
       const words = split.words ?? [];
       if (!words.length) return;
 
-      const cards = cardRefs.current.filter((el): el is HTMLLIElement => el !== null);
+      const wordsDuration = 1.3;
+      const cardStageStart = wordsDuration + 0.2;
+      const perCardStage = 0.9;
+      const totalDuration = cardStageStart + items.length * perCardStage;
 
       gsap.set(words, { opacity: 0.14, filter: "blur(3px)" });
-      gsap.set(cards, { opacity: 0, y: 24 });
-
-      const cardStart = 1.5;
-      const cardGap = 0.42;
-      const totalDuration = cardStart + Math.max(0, cards.length - 1) * cardGap + 0.5;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=220%",
+          end: "+=300%",
           scrub: 1,
           pin: true,
           anticipatePin: 1,
+          onUpdate: (self) => {
+            const t = self.progress * totalDuration;
+            const idx =
+              t < cardStageStart
+                ? null
+                : Math.min(items.length - 1, Math.floor((t - cardStageStart) / perCardStage));
+            setScrollActive((prev) => (prev === idx ? prev : idx));
+          },
         },
       });
 
-      tl.to(words, { opacity: 1, filter: "blur(0px)", stagger: 0.06, ease: "none", duration: 1.3 }, 0);
-      cards.forEach((card, i) => {
-        tl.to(card, { opacity: 1, y: 0, ease: "none", duration: 0.5 }, cardStart + i * cardGap);
-      });
+      tl.to(words, { opacity: 1, filter: "blur(0px)", stagger: 0.06, ease: "none", duration: wordsDuration }, 0);
       tl.to(gridRef.current, { yPercent: 14, ease: "none", duration: totalDuration }, 0);
       tl.to(
         contentRef.current,
@@ -125,30 +132,78 @@ export default function Values({
           &ldquo;{quote}&rdquo;
         </motion.h2>
 
-        {/* Value list — each card steps in on its own scroll beat */}
+        {/* Value list — one card highlights per scroll stage, mouse hover still works too */}
         <motion.ul
           className="rounded-[18px] border-t border-white/10 pt-6"
           style={{ boxShadow }}
         >
-          {items.map((value, i) => (
-            <li
-              key={value.title}
-              ref={(el) => {
-                cardRefs.current[i] = el;
-              }}
-              data-cursor="card"
-              className="group relative border-b border-white/10 py-6"
-            >
-              <span className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-brand-red/0 transition-colors duration-500 group-hover:bg-brand-red/[0.07]" />
-              <span className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-brand-red transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-              <h3 className="relative text-lg font-semibold text-white transition-colors duration-500 group-hover:text-brand-red group-hover:[text-shadow:0_0_18px_rgba(251,54,64,0.55)]">
-                {value.title}
-              </h3>
-              <p className="relative mt-1 text-white/55 transition-colors duration-500 group-hover:text-white/85">
-                {value.description}
-              </p>
-            </li>
-          ))}
+          {items.map((value, i) => {
+            const on = hovered === i || scrollActive === i;
+            return (
+              <motion.li
+                key={value.title}
+                data-cursor="card"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                className="group relative border-b border-white/10 py-6"
+              >
+                {/* Red wash pops in behind the card */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px]"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, rgba(251,54,64,0.18) 0%, rgba(251,54,64,0.07) 48%, rgba(251,54,64,0) 82%)",
+                  }}
+                  initial={false}
+                  animate={on ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.965 }}
+                  transition={POP}
+                />
+
+                {/* Neon edge snaps up at the left */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -left-4 top-1/2 h-10 w-[3px] rounded-full bg-brand-red"
+                  style={{ y: "-50%", boxShadow: "0 0 16px rgba(251,54,64,0.9)" }}
+                  initial={false}
+                  animate={on ? { scaleY: 1, opacity: 1 } : { scaleY: 0, opacity: 0 }}
+                  transition={POP}
+                />
+
+                {/* Rule along the bottom fills in */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left bg-brand-red"
+                  style={{ boxShadow: "0 0 10px rgba(251,54,64,0.8)" }}
+                  initial={false}
+                  animate={on ? { scaleX: 1 } : { scaleX: 0 }}
+                  transition={{ duration: 0.55, ease: EASE }}
+                />
+
+                <motion.h3
+                  className="relative text-lg font-semibold"
+                  initial={false}
+                  animate={
+                    on
+                      ? { x: 10, color: "#fb3640", textShadow: "0 0 18px rgba(251,54,64,0.55)" }
+                      : { x: 0, color: "#ffffff", textShadow: "0 0 0px rgba(251,54,64,0)" }
+                  }
+                  transition={POP}
+                >
+                  {value.title}
+                </motion.h3>
+
+                <motion.p
+                  className="relative mt-1"
+                  initial={false}
+                  animate={on ? { color: "rgba(255,255,255,0.88)" } : { color: "rgba(255,255,255,0.55)" }}
+                  transition={{ duration: 0.35, ease: EASE }}
+                >
+                  {value.description}
+                </motion.p>
+              </motion.li>
+            );
+          })}
         </motion.ul>
       </div>
     </section>
