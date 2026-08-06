@@ -44,7 +44,7 @@ export default function PageLoader() {
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[var(--color-surface-0)]"
+          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[var(--color-surface-dark)]"
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.5, ease: EASE }}
           aria-hidden="true"

@@ -82,6 +82,11 @@
   --color-surface-2: var(--surface-2);
   --color-surface-line: var(--surface-line);
 
+  /* Fixed dark surface, independent of theme — for chrome that's meant to
+     stay dark as a brand bookend (footer, intro loader) regardless of
+     which theme the rest of the page is in. */
+  --color-surface-dark: #0b0906;
+
   --radius-brand: var(--radius-lg);
 }
 
