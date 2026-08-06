@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { MagneticLink } from "@/components/motion/magnetic";
 import MorphField from "@/components/motion/morph-field";
 
@@ -15,12 +15,28 @@ export default function GrowthStack({
   pillars: readonly { title: string; description: string }[];
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [-60, 60]);
+  const contentY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [24, -24]);
 
   return (
-    <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28">
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28"
+    >
+      <motion.div
+        className="bg-grid pointer-events-none absolute inset-0 opacity-60"
+        style={{ y: gridY }}
+        aria-hidden="true"
+      />
       <MorphField className="pointer-events-none absolute right-10 top-14 hidden opacity-60 lg:block" />
 
+      <motion.div style={{ y: contentY }}>
       <motion.div
         className="relative mx-auto max-w-6xl px-6"
         initial={{ opacity: 0, y: 64 }}
@@ -133,6 +149,7 @@ export default function GrowthStack({
             View all services
           </MagneticLink>
         </div>
+      </motion.div>
       </motion.div>
     </section>
   );

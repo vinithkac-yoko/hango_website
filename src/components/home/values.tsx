@@ -5,6 +5,7 @@ import {
   motion,
   useMotionValue,
   useSpring,
+  useScroll,
   useTransform,
   useReducedMotion,
 } from "motion/react";
@@ -22,6 +23,13 @@ export default function Values({
 }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [-60, 60]);
+  const contentY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [24, -24]);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -52,14 +60,21 @@ export default function Values({
   }
 
   return (
-    <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
-      <div className="circuit-floor pointer-events-none absolute inset-0 opacity-70" aria-hidden="true" />
-      <div
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28"
+    >
+      <motion.div
+        className="circuit-floor pointer-events-none absolute inset-0 opacity-70"
+        style={{ y: gridY }}
+        aria-hidden="true"
+      />
+      <motion.div
         ref={ref}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         className="relative mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:gap-20"
-        style={{ perspective: 1200 }}
+        style={{ perspective: 1200, y: contentY }}
       >
         {/* Editorial quote — enters from the left */}
         <motion.h2
@@ -93,16 +108,18 @@ export default function Values({
               transition={{ duration: 0.6, delay: 0.24 + i * 0.09, ease: EASE }}
               whileHover={{ y: -3 }}
             >
-              <span className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-white/0 transition-colors duration-500 group-hover:bg-white/[0.05]" />
+              <span className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-brand-red/0 transition-colors duration-500 group-hover:bg-brand-red/[0.07]" />
               <span className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-brand-red transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-              <h3 className="relative text-lg font-semibold text-white">{value.title}</h3>
+              <h3 className="relative text-lg font-semibold text-white transition-colors duration-500 group-hover:text-brand-red group-hover:[text-shadow:0_0_18px_rgba(251,54,64,0.55)]">
+                {value.title}
+              </h3>
               <p className="relative mt-1 text-white/55 transition-colors duration-500 group-hover:text-white/85">
                 {value.description}
               </p>
             </motion.li>
           ))}
         </motion.ul>
-      </div>
+      </motion.div>
     </section>
   );
 }
