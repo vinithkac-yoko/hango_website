@@ -23,6 +23,13 @@
   --neu-dark: rgba(0, 0, 0, 0.5);
   --neu-light: rgba(255, 255, 255, 0.05);
 
+  /* Ambient neon nerve field. No blend mode: blending a full-viewport layer
+     re-composites the whole screen every frame, which more than halved the
+     scroll frame rate. Plain opacity over the dark canvas reads the same. */
+  --nerve-color: #fb3640;
+  --nerve-opacity: 0.42;
+  --veil: 0.84;
+
   /* Radius scale */
   --radius-sm: 12px;
   --radius-md: 14px;
@@ -58,6 +65,12 @@
 
   --neu-dark: rgba(20, 17, 11, 0.18);
   --neu-light: rgba(255, 255, 255, 0.9);
+
+  /* On cream the traces need to be darker than brand red to register at all,
+     so they read as etched copper rather than a pink haze. */
+  --nerve-color: #b81d27;
+  --nerve-opacity: 0.34;
+  --veil: 0.88;
 }
 
 @theme inline {
@@ -88,6 +101,45 @@
   --color-surface-dark: #0b0906;
 
   --radius-brand: var(--radius-lg);
+}
+
+/* Ambient nerve field ------------------------------------------------- */
+
+.nerve-root {
+  opacity: var(--nerve-opacity);
+  /* Isolate the field so its paint never invalidates page content. Not
+     `strict`: that adds size containment, which this inset-driven box
+     doesn't want. */
+  contain: layout paint;
+}
+
+/* The field breathes instead of carrying dash-animated charges along each
+   trace: stroke-dashoffset can't be composited and repainted the whole field
+   every frame. Opacity is composited, so this is effectively free. */
+@keyframes nerve-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.nerve-layer {
+  /* Motion owns `transform` here; this is purely the promotion hint. */
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: nerve-breathe 12s ease-in-out infinite;
+}
+
+/* Section surfaces sit *over* the nerve field rather than hiding it, so the
+   traces read as depth beneath the page instead of an overlay across text. */
+.veil-0 {
+  background-color: color-mix(in srgb, var(--surface-0) calc(var(--veil) * 100%), transparent);
+}
+.veil-1 {
+  background-color: color-mix(in srgb, var(--surface-1) calc(var(--veil) * 100%), transparent);
 }
 
 /* Neon emphasis — a glow that reads as light, not as a drop shadow */

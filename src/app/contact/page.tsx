@@ -22,7 +22,7 @@ export default function ContactPage() {
     // This section opens above the fold, so it keeps the background drift
     // but skips the scroll-in entrance that would leave it dimmed on load.
     <ScrollScene
-      className="bg-[var(--color-surface-0)]"
+      className="veil-0"
       lift={0}
       parallax={8}
       bg={

@@ -117,7 +117,7 @@ export default function GrowthStack({
     // scrolled out of sight.
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen items-center overflow-hidden bg-[var(--color-surface-1)] pb-16 pt-28 text-ink md:pb-20 md:pt-32"
+      className="relative flex min-h-screen items-center overflow-hidden veil-1 pb-16 pt-28 text-ink md:pb-20 md:pt-32"
     >
       <div ref={gridRef} className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <MorphField className="pointer-events-none absolute right-10 top-14 hidden opacity-60 lg:block" />

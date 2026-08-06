@@ -53,7 +53,7 @@ export default function PageHero({
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[var(--color-surface-0)]"
+      className="relative overflow-hidden veil-0"
     >
       <div ref={bgRef} className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="circuit-floor absolute inset-0" />

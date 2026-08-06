@@ -33,7 +33,7 @@ export default function AboutPage() {
       </PageHero>
 
       <ScrollScene
-        className="bg-[var(--color-surface-1)] py-20 md:py-28"
+        className="veil-1 py-20 md:py-28"
         bg={<div className="bg-grid absolute inset-0 opacity-60" />}
       >
         <div className="relative mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:gap-20">
@@ -48,7 +48,7 @@ export default function AboutPage() {
         </div>
       </ScrollScene>
 
-      <ScrollScene className="bg-[var(--color-surface-0)] py-20 text-ink md:py-28">
+      <ScrollScene className="veil-0 py-20 text-ink md:py-28">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">What we hold to</h2>
@@ -69,7 +69,7 @@ export default function AboutPage() {
       </ScrollScene>
 
       <ScrollScene
-        className="bg-[var(--color-surface-1)] py-20 text-center md:py-28"
+        className="veil-1 py-20 text-center md:py-28"
         bg={<div className="circuit-floor absolute inset-0" />}
       >
         <p className="relative mx-auto max-w-4xl px-6 text-2xl font-medium text-ink md:text-4xl">
@@ -77,7 +77,7 @@ export default function AboutPage() {
         </p>
       </ScrollScene>
 
-      <ScrollScene className="bg-[var(--color-surface-0)] py-20 md:py-28">
+      <ScrollScene className="veil-0 py-20 md:py-28">
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-ink md:text-5xl">Why Hango</h2>
           <ul className="mt-10 grid gap-x-12 gap-y-4 sm:grid-cols-2">
@@ -110,7 +110,7 @@ export default function AboutPage() {
       </ScrollScene>
 
       <ScrollScene
-        className="bg-[var(--color-surface-1)] py-20 md:py-28"
+        className="veil-1 py-20 md:py-28"
         bg={<div className="bg-grid absolute inset-0 opacity-60" />}
       >
         <div className="relative mx-auto max-w-6xl px-6">

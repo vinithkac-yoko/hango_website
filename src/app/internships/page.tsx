@@ -22,7 +22,7 @@ export default function InternshipsPage() {
       />
 
       <ScrollScene
-        className="bg-[var(--color-surface-1)] py-20 md:py-28"
+        className="veil-1 py-20 md:py-28"
         bg={<div className="bg-grid absolute inset-0 opacity-60" />}
       >
         <div className="relative mx-auto max-w-6xl px-6">
@@ -52,7 +52,7 @@ export default function InternshipsPage() {
 
           <PopCard
             index={2}
-            className="neon-edge mt-6 rounded-[18px] border border-transparent bg-[var(--color-surface-0)] p-8 text-ink"
+            className="neon-edge mt-6 rounded-[18px] border border-transparent veil-0 p-8 text-ink"
           >
             <h2 className="text-xl font-semibold transition-colors duration-500 group-data-[pop=on]:text-brand-red">
               {collegeTieUp.title}
@@ -65,7 +65,7 @@ export default function InternshipsPage() {
         </div>
       </ScrollScene>
 
-      <ScrollScene className="bg-[var(--color-surface-0)] py-24 md:py-32">
+      <ScrollScene className="veil-0 py-24 md:py-32">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-ink md:text-5xl">Ready to apply?</h2>

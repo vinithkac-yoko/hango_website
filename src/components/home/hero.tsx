@@ -108,7 +108,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       onDoubleClick={onDoubleClick}
-      className="relative overflow-hidden bg-[var(--color-surface-0)]"
+      className="relative overflow-hidden veil-0"
       style={{ perspective: 1000 }}
     >
       {/* Circuit floor + ambient neon bloom */}

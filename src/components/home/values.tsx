@@ -115,7 +115,7 @@ export default function Values({
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28"
+      className="relative overflow-hidden veil-1 py-20 md:py-28"
     >
       <div ref={gridRef} className="circuit-floor pointer-events-none absolute inset-0 opacity-70" aria-hidden="true" />
       <div
@@ -215,7 +215,7 @@ export default function Values({
 /** Closing call to action — enters with a zoom-fade. */
 export function ClosingCta() {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-surface-0)]">
+    <section className="relative overflow-hidden veil-0">
       <div className="circuit-floor pointer-events-none absolute inset-0" aria-hidden="true" />
       <motion.div
         className="relative mx-auto max-w-6xl px-6 py-32 md:py-40"

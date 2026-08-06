@@ -8,6 +8,7 @@ import { Spotlight, Grain, ScrollProgress, EasterEggs } from "@/components/motio
 import MotionProvider from "@/components/motion/motion-provider";
 import LenisProvider from "@/components/motion/lenis-provider";
 import ThemeProvider from "@/components/motion/theme-provider";
+import NeonNerves from "@/components/motion/neon-nerves";
 import "./globals.css";
 
 const arimo = Arimo({
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <MotionProvider>
             <LenisProvider>
+              <NeonNerves />
               <PageLoader />
               <ScrollProgress />
               <Spotlight />
