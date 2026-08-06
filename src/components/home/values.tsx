@@ -3,8 +3,8 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
 import { gsap } from "@/lib/gsap";
-import { useSplitWords } from "@/lib/use-split-words";
 import { MagneticLink } from "@/components/motion/magnetic";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -22,7 +22,6 @@ export default function Values({
   const gridRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLHeadingElement>(null);
   const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const words = useSplitWords(quoteRef, quote);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -54,10 +53,19 @@ export default function Values({
 
   // Pinned quote scene: the quote builds word by word, then each value
   // card steps in on its own beat, all scrubbed to scroll position.
+  // The split runs synchronously in this same effect (not via a
+  // state-driven hook) so this section's ScrollTrigger registers in the
+  // same pass as Hero's and Growth Stack's — otherwise it lands one
+  // render late, after its siblings have already measured the page and
+  // gotten the wrong pin positions for it.
   useGSAP(
     () => {
-      if (!sectionRef.current || !words || !words.length) return;
+      if (!sectionRef.current || !quoteRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const split = new SplitType(quoteRef.current, { types: "words", tagName: "span" });
+      const words = split.words ?? [];
+      if (!words.length) return;
 
       const cards = cardRefs.current.filter((el): el is HTMLLIElement => el !== null);
 
@@ -89,8 +97,10 @@ export default function Values({
         { scale: 0.97, opacity: 0.85, ease: "none", duration: 0.4 },
         totalDuration - 0.4,
       );
+
+      return () => split.revert();
     },
-    { scope: sectionRef, dependencies: [words] },
+    { scope: sectionRef, dependencies: [quote, items.length] },
   );
 
   return (
