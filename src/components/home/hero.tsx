@@ -9,6 +9,8 @@ import {
   useTransform,
   useReducedMotion,
 } from "motion/react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
 import { hasIntroPlayed } from "@/components/motion/page-loader";
 import IsoScene from "./iso-scene";
@@ -29,8 +31,45 @@ const BURST = Array.from({ length: 14 }, (_, i) => {
 export default function Hero({ hook, body }: { hook: string; body: string }) {
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const contentGridRef = useRef<HTMLDivElement>(null);
+  const headlineOuterRef = useRef<HTMLDivElement>(null);
+  const bodyOuterRef = useRef<HTMLDivElement>(null);
+  const visualOuterRef = useRef<HTMLDivElement>(null);
+  const scrollCueRef = useRef<HTMLDivElement>(null);
   const [base] = useState(() => (hasIntroPlayed() ? 0.05 : 1.25));
   const [burst, setBurst] = useState<{ id: number; x: number; y: number } | null>(null);
+
+  // Scenes 2 & 3: once the load-in (scene 1) has settled, scrolling takes
+  // over — the headline lifts, the visual expands, then the whole hero
+  // compresses as the next section rises beneath it.
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=160%",
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      tl.to(scrollCueRef.current, { opacity: 0, ease: "none" }, 0)
+        .to(headlineOuterRef.current, { y: -46, ease: "none" }, 0)
+        .to(bodyOuterRef.current, { y: -22, opacity: 0.82, ease: "none" }, 0)
+        .to(visualOuterRef.current, { scale: 1.14, ease: "none" }, 0)
+        .to(bgRef.current, { filter: "brightness(0.72) saturate(1.25)", ease: "none" }, 0)
+        .addLabel("compress", 0.62)
+        .to(contentGridRef.current, { scale: 0.97, opacity: 0.82, ease: "none" }, "compress")
+        .to(bgRef.current, { opacity: 0.55, ease: "none" }, "compress");
+    },
+    { scope: sectionRef },
+  );
 
   const mxRaw = useMotionValue(0);
   const myRaw = useMotionValue(0);
@@ -73,7 +112,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
       style={{ perspective: 1000 }}
     >
       {/* Circuit floor + ambient neon bloom */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div ref={bgRef} className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="circuit-floor absolute inset-0" />
         {/* Vignette keeps focus centred */}
         <div className="edge-light absolute inset-0" />
@@ -102,81 +141,91 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
         )}
       </AnimatePresence>
 
-      <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-12 px-6 pb-24 pt-32 md:pb-28 md:pt-36 lg:grid-cols-[1fr_1fr]">
+      <div
+        ref={contentGridRef}
+        className="relative z-[2] mx-auto grid max-w-6xl items-center gap-12 px-6 pb-24 pt-32 md:pb-28 md:pt-36 lg:grid-cols-[1fr_1fr]"
+      >
         <div>
-          <motion.h1
-            className="max-w-3xl text-5xl font-bold text-white md:text-[5rem] md:leading-[0.95]"
-            style={{ x: headX, y: headY }}
-          >
-            {HEADLINE_LINES.map((line, li) => (
-              <span key={line.text} className="block overflow-hidden pb-[0.08em]">
-                <motion.span
-                  className={`inline-block ${line.accent ? "kinetic-accent neon-text" : ""}`}
-                  initial={{ y: "108%", opacity: 0, filter: "blur(10px)", rotate: 1.6 }}
-                  animate={{ y: "0%", opacity: 1, filter: "blur(0px)", rotate: 0 }}
-                  transition={{ duration: 0.9, delay: base + li * 0.12, ease: EASE }}
-                >
-                  {line.text}
-                </motion.span>
-              </span>
-            ))}
-          </motion.h1>
+          <div ref={headlineOuterRef}>
+            <motion.h1
+              className="max-w-3xl text-5xl font-bold text-white md:text-[5rem] md:leading-[0.95]"
+              style={{ x: headX, y: headY }}
+            >
+              {HEADLINE_LINES.map((line, li) => (
+                <span key={line.text} className="block overflow-hidden pb-[0.08em]">
+                  <motion.span
+                    className={`inline-block ${line.accent ? "kinetic-accent neon-text" : ""}`}
+                    initial={{ y: "108%", opacity: 0, filter: "blur(10px)", rotate: 1.6 }}
+                    animate={{ y: "0%", opacity: 1, filter: "blur(0px)", rotate: 0 }}
+                    transition={{ duration: 0.9, delay: base + li * 0.12, ease: EASE }}
+                  >
+                    {line.text}
+                  </motion.span>
+                </span>
+              ))}
+            </motion.h1>
+          </div>
 
-          <motion.div
-            className="mt-8 h-px w-40 neon-rule"
-            style={{ x: paraX }}
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.9, delay: base + 0.3, ease: EASE }}
-          />
+          <div ref={bodyOuterRef}>
+            <motion.div
+              className="mt-8 h-px w-40 neon-rule"
+              style={{ x: paraX }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.9, delay: base + 0.3, ease: EASE }}
+            />
 
-          <motion.p
-            className="mt-6 max-w-2xl text-xl font-medium text-white md:text-2xl"
-            style={{ x: paraX, y: paraY }}
-            initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.6 }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
-            transition={{ duration: 0.8, delay: base + 0.4, ease: EASE }}
-          >
-            {hook}
-          </motion.p>
+            <motion.p
+              className="mt-6 max-w-2xl text-xl font-medium text-white md:text-2xl"
+              style={{ x: paraX, y: paraY }}
+              initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.6 }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
+              transition={{ duration: 0.8, delay: base + 0.4, ease: EASE }}
+            >
+              {hook}
+            </motion.p>
 
-          <motion.p
-            className="mt-4 max-w-xl text-white/55"
-            style={{ x: paraX, y: paraY }}
-            initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.5 }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
-            transition={{ duration: 0.8, delay: base + 0.52, ease: EASE }}
-          >
-            {body}
-          </motion.p>
+            <motion.p
+              className="mt-4 max-w-xl text-white/55"
+              style={{ x: paraX, y: paraY }}
+              initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.5 }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
+              transition={{ duration: 0.8, delay: base + 0.52, ease: EASE }}
+            >
+              {body}
+            </motion.p>
 
-          <motion.div
-            className="mt-10 flex flex-wrap gap-4"
-            style={{ x: btnX, y: btnY }}
-            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.8, delay: base + 0.64, ease: EASE }}
-          >
-            <MagneticLink href="/contact" className="btn-primary" arrow>
-              Get a Quote
-            </MagneticLink>
-            <MagneticLink href="/services" className="btn-secondary-invert" arrow>
-              Explore Services
-            </MagneticLink>
-          </motion.div>
+            <motion.div
+              className="mt-10 flex flex-wrap gap-4"
+              style={{ x: btnX, y: btnY }}
+              initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, delay: base + 0.64, ease: EASE }}
+            >
+              <MagneticLink href="/contact" className="btn-primary" arrow>
+                Get a Quote
+              </MagneticLink>
+              <MagneticLink href="/services" className="btn-secondary-invert" arrow>
+                Explore Services
+              </MagneticLink>
+            </motion.div>
+          </div>
         </div>
 
-        <motion.div
-          className="hidden justify-self-center lg:flex"
-          initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 1.2, delay: base + 0.1, ease: EASE }}
-        >
-          <IsoScene mx={mx} my={my} />
-        </motion.div>
+        <div ref={visualOuterRef} className="hidden justify-self-center lg:flex">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, delay: base + 0.1, ease: EASE }}
+          >
+            <IsoScene mx={mx} my={my} />
+          </motion.div>
+        </div>
       </div>
 
-      <ScrollCue delay={base + 0.9} />
+      <div ref={scrollCueRef}>
+        <ScrollCue delay={base + 0.9} />
+      </div>
     </section>
   );
 }

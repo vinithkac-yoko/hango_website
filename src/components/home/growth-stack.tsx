@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
 import MorphField from "@/components/motion/morph-field";
 
@@ -15,35 +17,50 @@ export default function GrowthStack({
   pillars: readonly { title: string; description: string }[];
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
-  const reduce = useReducedMotion();
+  const [scrollActive, setScrollActive] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const gridY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [-60, 60]);
-  const contentY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [24, -24]);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Pinned services scene: one pillar "activates" per scroll stage, using
+  // the same red-pop treatment mouse hover already triggers elsewhere.
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const stages = pillars.length;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: `+=${stages * 90}%`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const idx = Math.min(stages - 1, Math.floor(self.progress * stages));
+            setScrollActive((prev) => (prev === idx ? prev : idx));
+          },
+        },
+      });
+
+      tl.to(gridRef.current, { yPercent: 16, ease: "none", duration: stages }, 0);
+      tl.to(contentRef.current, { scale: 0.97, opacity: 0.85, ease: "none", duration: 0.6 }, stages - 0.6);
+    },
+    { scope: sectionRef, dependencies: [pillars.length] },
+  );
 
   return (
     <section
       ref={sectionRef}
       className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 text-white md:py-28"
     >
-      <motion.div
-        className="bg-grid pointer-events-none absolute inset-0 opacity-60"
-        style={{ y: gridY }}
-        aria-hidden="true"
-      />
+      <div ref={gridRef} className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <MorphField className="pointer-events-none absolute right-10 top-14 hidden opacity-60 lg:block" />
 
-      <motion.div style={{ y: contentY }}>
-      <motion.div
-        className="relative mx-auto max-w-6xl px-6"
-        initial={{ opacity: 0, y: 64 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.9, ease: EASE }}
-      >
+      <div ref={contentRef} className="relative mx-auto max-w-6xl px-6">
         <h2 className="max-w-2xl text-3xl font-bold md:text-5xl">The Growth Stack</h2>
         <p className="mt-4 max-w-xl text-white/60">
           Every pillar supports and amplifies the others, built as one integrated system — not
@@ -52,7 +69,7 @@ export default function GrowthStack({
 
         <div className="mt-12 border-t border-white/10">
           {pillars.map((pillar, i) => {
-            const on = hovered === i;
+            const on = hovered === i || scrollActive === i;
             return (
               <motion.div
                 key={pillar.title}
@@ -60,10 +77,6 @@ export default function GrowthStack({
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
                 className="group relative grid items-baseline gap-3 border-b border-white/10 py-8 md:grid-cols-[1fr_2fr_auto] md:gap-12"
-                initial={{ opacity: 0, y: 34 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, delay: i * 0.07, ease: EASE }}
               >
                 {/* Red wash pops in behind the row */}
                 <motion.span
@@ -149,8 +162,7 @@ export default function GrowthStack({
             View all services
           </MagneticLink>
         </div>
-      </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }
