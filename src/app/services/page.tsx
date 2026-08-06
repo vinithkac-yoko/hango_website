@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/layout/page-hero";
 import MorphField from "@/components/motion/morph-field";
+import ScrollScene from "@/components/motion/scroll-scene";
+import PopRows from "@/components/motion/pop-rows";
+import PopCard from "@/components/motion/pop-card";
 import { retainerService, projectServices } from "@/data/services";
 
 export const metadata: Metadata = {
@@ -18,8 +21,10 @@ export default function ServicesPage() {
         motif="layers"
       />
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+      <ScrollScene
+        className="bg-[var(--color-surface-1)] py-20 md:py-28"
+        bg={<div className="bg-grid absolute inset-0 opacity-60" />}
+      >
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold text-ink md:text-3xl">{retainerService.title}</h2>
           <p className="mt-2 max-w-2xl text-ink/55">{retainerService.description}</p>
@@ -29,16 +34,15 @@ export default function ServicesPage() {
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {retainerService.tiers.map((tier, i) => (
-              <div
+              <PopCard
                 key={tier.name}
-                data-cursor="card"
-                className={`flex flex-col rounded-[18px] bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 ${
-                  i === 1
-                    ? "border border-brand-red/70 shadow-[0_0_28px_rgba(251,54,64,0.18)]"
-                    : "border border-ink/10 hover:border-ink/25"
-                }`}
+                index={i}
+                featured={i === 1}
+                className="flex flex-col rounded-[18px] border border-ink/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm"
               >
-                <h3 className="text-lg font-semibold text-ink">{tier.name}</h3>
+                <h3 className="text-lg font-semibold text-ink transition-colors duration-500 group-data-[pop=on]:text-brand-red">
+                  {tier.name}
+                </h3>
                 <p className="mt-1 text-sm text-ink/45">Contact us for pricing</p>
                 <ul className="mt-6 flex-1 space-y-3 text-sm text-ink/70">
                   {tier.features.map((feature) => (
@@ -61,13 +65,13 @@ export default function ServicesPage() {
                 >
                   Get a Quote
                 </Link>
-              </div>
+              </PopCard>
             ))}
           </div>
         </div>
-      </section>
+      </ScrollScene>
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-20 text-ink md:py-28">
+      <ScrollScene className="bg-[var(--color-surface-0)] py-20 text-ink md:py-28">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-2xl font-bold md:text-3xl">One-Time Services</h2>
@@ -75,32 +79,24 @@ export default function ServicesPage() {
             Fixed packages for standard jobs, custom quotes for larger projects.
           </p>
 
-          <div className="mt-12 divide-y divide-ink/10 border-t border-ink/10">
-            {projectServices.map((service) => (
-              <div
-                key={service.slug}
-                data-cursor="card"
-                className="group relative grid gap-2 py-7 md:grid-cols-[1fr_2fr_auto] md:items-baseline md:gap-8"
-              >
-                <span className="pointer-events-none absolute inset-0 -mx-5 rounded-[14px] bg-brand-red/0 transition-colors duration-500 group-hover:bg-brand-red/[0.07]" />
-                <h3 className="relative font-semibold transition-colors duration-500 group-hover:text-brand-red">
-                  {service.title}
-                </h3>
-                <div className="relative">
-                  <p className="text-ink/60">{service.description}</p>
-                  <p className="mt-1.5 text-sm text-ink/30">{service.includes.join(" · ")}</p>
-                </div>
-                <p className="relative whitespace-nowrap text-sm text-brand-red md:text-right">
-                  {service.pricingNote}
-                </p>
-              </div>
-            ))}
+          <div className="mt-12">
+            <PopRows
+              items={projectServices.map((service) => ({
+                key: service.slug,
+                title: service.title,
+                description: service.description,
+                sub: service.includes.join(" · "),
+                meta: service.pricingNote,
+              }))}
+            />
           </div>
         </div>
-      </section>
+      </ScrollScene>
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-24 md:py-32">
-        <div className="circuit-floor pointer-events-none absolute inset-0" aria-hidden="true" />
+      <ScrollScene
+        className="bg-[var(--color-surface-1)] py-24 md:py-32"
+        bg={<div className="circuit-floor absolute inset-0" />}
+      >
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-ink md:text-5xl">Not sure what you need?</h2>
           <p className="mt-4 max-w-xl text-ink/55">
@@ -110,7 +106,7 @@ export default function ServicesPage() {
             Get in touch
           </Link>
         </div>
-      </section>
+      </ScrollScene>
     </>
   );
 }

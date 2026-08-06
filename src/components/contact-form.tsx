@@ -3,6 +3,13 @@
 import { useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 
+const FIELD =
+  "mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink " +
+  "placeholder:text-ink/35 outline-none transition-[border-color,box-shadow,background-color] duration-300 " +
+  "hover:border-ink/30 hover:bg-ink/[0.06] " +
+  "focus-visible:border-brand-red focus-visible:shadow-[0_0_0_3px_rgba(251,54,64,0.15)] " +
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red";
+
 /**
  * Interim contact form: opens the visitor's mail client via mailto with the
  * message pre-filled. Swap this handler for a real backend/CRM integration
@@ -31,7 +38,7 @@ export default function ContactForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className={FIELD}
         />
       </div>
 
@@ -45,7 +52,7 @@ export default function ContactForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className={FIELD}
         />
       </div>
 
@@ -59,7 +66,7 @@ export default function ContactForm() {
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-1.5 w-full rounded-[12px] border border-ink/15 bg-ink/[0.04] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus-visible:border-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-red"
+          className={FIELD}
         />
       </div>
 

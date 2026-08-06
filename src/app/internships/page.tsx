@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/layout/page-hero";
 import MorphField from "@/components/motion/morph-field";
+import ScrollScene from "@/components/motion/scroll-scene";
+import PopCard from "@/components/motion/pop-card";
 import { internshipPrograms, collegeTieUp } from "@/data/internships";
 
 export const metadata: Metadata = {
@@ -19,15 +21,17 @@ export default function InternshipsPage() {
         motif="certificate"
       />
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-1)] py-20 md:py-28">
-        <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+      <ScrollScene
+        className="bg-[var(--color-surface-1)] py-20 md:py-28"
+        bg={<div className="bg-grid absolute inset-0 opacity-60" />}
+      >
         <div className="relative mx-auto max-w-6xl px-6">
           <div className="grid gap-6 md:grid-cols-2">
-            {internshipPrograms.map((program) => (
-              <div
+            {internshipPrograms.map((program, i) => (
+              <PopCard
                 key={program.slug}
-                data-cursor="card"
-                className="group rounded-[18px] border border-ink/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-brand-red/50"
+                index={i}
+                className="rounded-[18px] border border-ink/10 bg-[var(--color-surface-2)]/70 p-8 backdrop-blur-sm"
               >
                 <p
                   className="text-sm font-semibold text-brand-red"
@@ -35,27 +39,33 @@ export default function InternshipsPage() {
                 >
                   {program.duration}
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-ink">{program.title}</h2>
+                <h2 className="mt-2 text-xl font-semibold text-ink transition-colors duration-500 group-data-[pop=on]:text-brand-red">
+                  {program.title}
+                </h2>
                 <p className="mt-1 text-sm text-ink/45">{program.audience}</p>
-                <p className="mt-4 text-ink/65">{program.description}</p>
-              </div>
+                <p className="mt-4 text-ink/65 transition-colors duration-500 group-data-[pop=on]:text-ink/85">
+                  {program.description}
+                </p>
+              </PopCard>
             ))}
           </div>
 
-          <div
-            className="neon-edge mt-6 rounded-[18px] bg-[var(--color-surface-0)] p-8 text-ink"
-            data-cursor="card"
+          <PopCard
+            index={2}
+            className="neon-edge mt-6 rounded-[18px] border border-transparent bg-[var(--color-surface-0)] p-8 text-ink"
           >
-            <h2 className="text-xl font-semibold">{collegeTieUp.title}</h2>
+            <h2 className="text-xl font-semibold transition-colors duration-500 group-data-[pop=on]:text-brand-red">
+              {collegeTieUp.title}
+            </h2>
             <p className="mt-3 max-w-2xl text-ink/65">{collegeTieUp.description}</p>
             <Link href="/contact" className="btn-primary mt-6">
               Discuss a partnership
             </Link>
-          </div>
+          </PopCard>
         </div>
-      </section>
+      </ScrollScene>
 
-      <section className="relative overflow-hidden bg-[var(--color-surface-0)] py-24 md:py-32">
+      <ScrollScene className="bg-[var(--color-surface-0)] py-24 md:py-32">
         <MorphField className="pointer-events-none absolute right-10 top-16 hidden opacity-60 lg:block" />
         <div className="relative mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold text-ink md:text-5xl">Ready to apply?</h2>
@@ -66,7 +76,7 @@ export default function InternshipsPage() {
             Apply now
           </Link>
         </div>
-      </section>
+      </ScrollScene>
     </>
   );
 }
