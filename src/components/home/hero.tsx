@@ -231,7 +231,7 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
           </div>
         </div>
 
-        <div ref={visualOuterRef} className="hidden justify-self-center lg:flex">
+        <div ref={visualOuterRef} className="hidden w-full justify-self-center lg:flex">
           <IsoScene mx={mx} my={my} />
         </div>
       </div>

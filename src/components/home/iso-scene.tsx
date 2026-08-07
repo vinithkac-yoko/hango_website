@@ -15,9 +15,17 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 const CX = 300;
 const CY = 265;
-/** Comfortably clears the 168×232 logo's half-diagonal (~143px). */
-const RING_R = 150;
-const NODE_R = 220;
+/**
+ * Comfortably clears the 168×232 logo's half-diagonal (~143px) — the ring
+ * radius is in viewBox units, and the scene renders at roughly 0.88px per
+ * unit once it fills its actual column width, so 215 units ≈ 190 real px of
+ * clearance around the mark.
+ */
+const RING_R = 215;
+/** Pushed out toward the edges of the scene so the traces span the full
+    width of the hero's right-hand column rather than clustering near the
+    logo. */
+const NODE_R = 300;
 
 const NODES = [
   { id: "seo", label: "SEO", angle: -90 },
@@ -57,7 +65,7 @@ export default function IsoScene({
     <div className="relative w-full max-w-[680px]" aria-hidden="true">
       <motion.svg
         viewBox="0 0 600 520"
-        className="h-full w-full overflow-visible"
+        className="w-full overflow-visible"
         style={{ x: driftX, y: driftY }}
       >
         <defs>
@@ -182,7 +190,7 @@ export default function IsoScene({
         <motion.circle
           cx={CX}
           cy={CY}
-          r="150"
+          r={RING_R}
           fill="url(#coreGlow)"
           opacity="0.7"
           initial={{ opacity: 0 }}
