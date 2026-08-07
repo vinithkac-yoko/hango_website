@@ -12,7 +12,6 @@ import {
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { MagneticLink } from "@/components/motion/magnetic";
-import { hasIntroPlayed } from "@/components/motion/page-loader";
 import IsoScene from "./iso-scene";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -37,16 +36,38 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
   const bodyOuterRef = useRef<HTMLDivElement>(null);
   const visualOuterRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
-  const [base] = useState(() => (hasIntroPlayed() ? 0.05 : 1.25));
+  const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const ruleWrapRef = useRef<HTMLDivElement>(null);
+  const hookWrapRef = useRef<HTMLDivElement>(null);
+  const bodyWrapRef = useRef<HTMLDivElement>(null);
+  const ctaWrapRef = useRef<HTMLDivElement>(null);
   const [burst, setBurst] = useState<{ id: number; x: number; y: number } | null>(null);
 
-  // Scenes 2 & 3: once the load-in (scene 1) has settled, scrolling takes
-  // over — the headline lifts, the visual expands, then the whole hero
-  // compresses as the next section rises beneath it.
+  // The whole hero is one scroll-driven story rather than a load animation
+  // plus a scroll epilogue: the first scroll reveals "We are Hango.", the
+  // second brings in "Engineering Digital Growth.", then the supporting copy
+  // and visual, then the headline lifts as the visual expands, then the
+  // whole scene compresses as the next section rises in. All of it shares
+  // the same "+=160%" of scroll the lift/compress alone used to take, so
+  // scrolling through the hero now does something at every stage instead of
+  // arriving with the headline already spent and several scrolls of nothing
+  // before the page moves on.
   useGSAP(
     () => {
       if (!sectionRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const lines = lineRefs.current.filter((el): el is HTMLSpanElement => el !== null);
+      const support = [hookWrapRef.current, bodyWrapRef.current, ctaWrapRef.current, visualOuterRef.current];
+
+      gsap.set(lines, { y: "108%", opacity: 0, filter: "blur(10px)", rotate: 1.6 });
+      gsap.set(ruleWrapRef.current, { scaleX: 0, opacity: 0, transformOrigin: "left center" });
+      gsap.set([hookWrapRef.current, bodyWrapRef.current, ctaWrapRef.current], {
+        opacity: 0,
+        y: 22,
+        filter: "blur(8px)",
+      });
+      gsap.set(visualOuterRef.current, { opacity: 0, scale: 0.9, filter: "blur(12px)" });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -59,14 +80,25 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
         },
       });
 
-      tl.to(scrollCueRef.current, { opacity: 0, ease: "none" }, 0)
-        .to(headlineOuterRef.current, { y: -46, ease: "none" }, 0)
-        .to(bodyOuterRef.current, { y: -22, opacity: 0.82, ease: "none" }, 0)
-        .to(visualOuterRef.current, { scale: 1.14, ease: "none" }, 0)
-        .to(bgRef.current, { filter: "brightness(0.72) saturate(1.25)", ease: "none" }, 0)
-        .addLabel("compress", 0.62)
-        .to(contentGridRef.current, { scale: 0.97, opacity: 0.82, ease: "none" }, "compress")
-        .to(bgRef.current, { opacity: 0.55, ease: "none" }, "compress");
+      tl.to(scrollCueRef.current, { opacity: 0, ease: "none", duration: 0.4 }, 0)
+        // Scroll 1: "We are Hango."
+        .to(lines[0], { y: "0%", opacity: 1, filter: "blur(0px)", rotate: 0, ease: "none", duration: 0.6 }, 0)
+        // Scroll 2: "Engineering Digital Growth."
+        .to(
+          [lines[1], lines[2]],
+          { y: "0%", opacity: 1, filter: "blur(0px)", rotate: 0, ease: "none", duration: 0.6, stagger: 0.18 },
+          0.55,
+        )
+        .to(ruleWrapRef.current, { scaleX: 1, opacity: 1, ease: "none", duration: 0.3 }, 1.15)
+        .to(support, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", ease: "none", duration: 0.55, stagger: 0.12 }, 1.3)
+        .addLabel("lift", 2.2)
+        .to(headlineOuterRef.current, { y: -46, ease: "none", duration: 1.3 }, "lift")
+        .to(bodyOuterRef.current, { y: -22, opacity: 0.82, ease: "none", duration: 1.3 }, "lift")
+        .to(visualOuterRef.current, { scale: 1.14, ease: "none", duration: 1.3 }, "lift")
+        .to(bgRef.current, { filter: "brightness(0.72) saturate(1.25)", ease: "none", duration: 1.3 }, "lift")
+        .addLabel("compress", 3.5)
+        .to(contentGridRef.current, { scale: 0.97, opacity: 0.82, ease: "none", duration: 0.6 }, "compress")
+        .to(bgRef.current, { opacity: 0.55, ease: "none", duration: 0.6 }, "compress");
     },
     { scope: sectionRef },
   );
@@ -153,90 +185,71 @@ export default function Hero({ hook, body }: { hook: string; body: string }) {
             >
               {HEADLINE_LINES.map((line, li) => (
                 <span key={line.text} className="block overflow-hidden pb-[0.08em]">
-                  <motion.span
+                  <span
+                    ref={(el) => {
+                      lineRefs.current[li] = el;
+                    }}
                     className={`inline-block ${line.accent ? "kinetic-accent neon-text" : ""}`}
-                    initial={{ y: "108%", opacity: 0, filter: "blur(10px)", rotate: 1.6 }}
-                    animate={{ y: "0%", opacity: 1, filter: "blur(0px)", rotate: 0 }}
-                    transition={{ duration: 0.9, delay: base + li * 0.12, ease: EASE }}
                   >
                     {line.text}
-                  </motion.span>
+                  </span>
                 </span>
               ))}
             </motion.h1>
           </div>
 
           <div ref={bodyOuterRef}>
-            <motion.div
-              className="mt-8 h-px w-40 neon-rule"
-              style={{ x: paraX }}
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.9, delay: base + 0.3, ease: EASE }}
-            />
+            <div ref={ruleWrapRef}>
+              <motion.div className="mt-8 h-px w-40 neon-rule" style={{ x: paraX }} />
+            </div>
 
-            <motion.p
-              className="mt-6 max-w-2xl text-xl font-medium text-ink md:text-2xl"
-              style={{ x: paraX, y: paraY }}
-              initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.6 }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
-              transition={{ duration: 0.8, delay: base + 0.4, ease: EASE }}
-            >
-              {hook}
-            </motion.p>
+            <div ref={hookWrapRef}>
+              <motion.p
+                className="mt-6 max-w-2xl text-xl font-medium text-ink md:text-2xl"
+                style={{ x: paraX, y: paraY }}
+              >
+                {hook}
+              </motion.p>
+            </div>
 
-            <motion.p
-              className="mt-4 max-w-xl text-ink/55"
-              style={{ x: paraX, y: paraY }}
-              initial={{ opacity: 0, y: 22, filter: "blur(8px)", rotate: 0.5 }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)", rotate: 0 }}
-              transition={{ duration: 0.8, delay: base + 0.52, ease: EASE }}
-            >
-              {body}
-            </motion.p>
+            <div ref={bodyWrapRef}>
+              <motion.p className="mt-4 max-w-xl text-ink/55" style={{ x: paraX, y: paraY }}>
+                {body}
+              </motion.p>
+            </div>
 
-            <motion.div
-              className="mt-10 flex flex-wrap gap-4"
-              style={{ x: btnX, y: btnY }}
-              initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 0.8, delay: base + 0.64, ease: EASE }}
-            >
-              <MagneticLink href="/contact" className="btn-primary" arrow>
-                Get a Quote
-              </MagneticLink>
-              <MagneticLink href="/services" className="btn-secondary-invert" arrow>
-                Explore Services
-              </MagneticLink>
-            </motion.div>
+            <div ref={ctaWrapRef}>
+              <motion.div className="mt-10 flex flex-wrap gap-4" style={{ x: btnX, y: btnY }}>
+                <MagneticLink href="/contact" className="btn-primary" arrow>
+                  Get a Quote
+                </MagneticLink>
+                <MagneticLink href="/services" className="btn-secondary-invert" arrow>
+                  Explore Services
+                </MagneticLink>
+              </motion.div>
+            </div>
           </div>
         </div>
 
         <div ref={visualOuterRef} className="hidden justify-self-center lg:flex">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.2, delay: base + 0.1, ease: EASE }}
-          >
-            <IsoScene mx={mx} my={my} />
-          </motion.div>
+          <IsoScene mx={mx} my={my} />
         </div>
       </div>
 
       <div ref={scrollCueRef}>
-        <ScrollCue delay={base + 0.9} />
+        <ScrollCue />
       </div>
     </section>
   );
 }
 
-function ScrollCue({ delay }: { delay: number }) {
+function ScrollCue() {
   return (
     <motion.div
       className="relative z-[2] flex flex-col items-center gap-2 pb-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ duration: 0.6, delay: 0.4 }}
       aria-hidden="true"
     >
       <div className="flex h-9 w-[22px] items-start justify-center rounded-full border border-ink/25 p-1.5">
