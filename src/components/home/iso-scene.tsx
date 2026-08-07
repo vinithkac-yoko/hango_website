@@ -5,37 +5,40 @@ import Logo3D from "./logo-3d";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-/* ---------- isometric projection ---------- */
+/* ---------- layout ----------
+   Flat 2D, not isometric: nodes sit at even angles on a ring around the
+   logo, and every trace starts on a smaller clearance ring rather than at
+   dead centre. That clearance ring is what keeps the traces from ever
+   crossing the mark — earlier they radiated from the centre point itself,
+   so their opening segments ran directly behind the logo and showed
+   through the transparent gaps in its letterforms. */
 
-const U = 44; // grid unit in px
-const COS30 = 0.866;
-const SIN30 = 0.5;
 const CX = 300;
 const CY = 265;
+/** Comfortably clears the 168×232 logo's half-diagonal (~143px). */
+const RING_R = 150;
+const NODE_R = 220;
 
-/** Grid space (x, y, height z) -> screen space. */
-function iso(x: number, y: number, z = 0): [number, number] {
-  return [(x - y) * COS30 * U + CX, (x + y) * SIN30 * U - z * U + CY];
-}
-
-/* ---------- scene layout ---------- */
-
-/** The six capabilities that radiate from the core. */
 const NODES = [
-  { id: "seo", x: -3.4, y: -3.4, label: "SEO" },
-  { id: "ads", x: 3.4, y: -3.4, label: "Ads" },
-  { id: "web", x: 4.2, y: 0.6, label: "Web" },
-  { id: "brand", x: 1.4, y: 3.8, label: "Brand" },
-  { id: "social", x: -2.6, y: 3.8, label: "Social" },
-  { id: "data", x: -4.2, y: 0.4, label: "Data" },
+  { id: "seo", label: "SEO", angle: -90 },
+  { id: "ads", label: "Ads", angle: -30 },
+  { id: "web", label: "Web", angle: 30 },
+  { id: "brand", label: "Brand", angle: 90 },
+  { id: "social", label: "Social", angle: 150 },
+  { id: "data", label: "Data", angle: 210 },
 ];
 
-/** Right-angled circuit routing, like traces on a board. */
-function tracePath(nx: number, ny: number) {
-  const a = iso(0, 0, 0.34);
-  const b = iso(nx, 0, 0.34);
-  const c = iso(nx, ny, 0.34);
-  return `M${a[0]},${a[1]} L${b[0]},${b[1]} L${c[0]},${c[1]}`;
+function polar(angleDeg: number, r: number): [number, number] {
+  const rad = (angleDeg * Math.PI) / 180;
+  return [CX + Math.cos(rad) * r, CY + Math.sin(rad) * r];
+}
+
+/** Straight spoke from the clearance ring out to a node — never any closer
+    to centre than RING_R, at any angle. */
+function tracePath(angle: number) {
+  const [sx, sy] = polar(angle, RING_R);
+  const [ex, ey] = polar(angle, NODE_R);
+  return `M${sx.toFixed(1)},${sy.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`;
 }
 
 export default function IsoScene({
@@ -45,22 +48,17 @@ export default function IsoScene({
   mx: MotionValue<number>;
   my: MotionValue<number>;
 }) {
-  // Gentle pointer-driven tilt — the diorama leans toward the cursor.
-  const rotY = useTransform(mx, [-0.5, 0.5], [7, -7]);
-  const rotX = useTransform(my, [-0.5, 0.5], [-5, 5]);
+  // Flat 2D drift only — no rotateX/rotateY tilt, so the circuit always
+  // faces the viewer instead of skewing into a 3D read.
   const driftX = useTransform(mx, (v) => v * 16);
   const driftY = useTransform(my, (v) => v * 10);
 
   return (
-    <motion.div
-      className="relative w-full max-w-[680px]"
-      style={{ perspective: 1400 }}
-      aria-hidden="true"
-    >
+    <div className="relative w-full max-w-[680px]" aria-hidden="true">
       <motion.svg
         viewBox="0 0 600 520"
         className="h-full w-full overflow-visible"
-        style={{ rotateX: rotX, rotateY: rotY, x: driftX, y: driftY, transformStyle: "preserve-3d" }}
+        style={{ x: driftX, y: driftY }}
       >
         <defs>
           <radialGradient id="coreGlow">
@@ -80,10 +78,25 @@ export default function IsoScene({
           </filter>
         </defs>
 
-        {/* Beat 2 — circuit traces draw outward from the core */}
+        {/* Beat 1 — the clearance ring settles in, framing the logo */}
+        <motion.circle
+          cx={CX}
+          cy={CY}
+          r={RING_R}
+          fill="none"
+          stroke="#fb3640"
+          strokeOpacity="0.16"
+          strokeWidth="1"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease: EASE }}
+          style={{ transformOrigin: `${CX}px ${CY}px` }}
+        />
+
+        {/* Beat 2 — circuit traces draw outward from the ring */}
         <g fill="none" strokeLinecap="round" strokeLinejoin="round">
           {NODES.map((n, i) => {
-            const d = tracePath(n.x, n.y);
+            const d = tracePath(n.angle);
             return (
               <g key={n.id}>
                 <motion.path
@@ -94,7 +107,7 @@ export default function IsoScene({
                   filter="url(#softNeon)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.9, delay: 0.75 + i * 0.11, ease: EASE }}
+                  transition={{ duration: 0.7, delay: 0.75 + i * 0.11, ease: EASE }}
                 />
                 <motion.path
                   d={d}
@@ -103,22 +116,23 @@ export default function IsoScene({
                   filter="url(#neon)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.9, delay: 0.75 + i * 0.11, ease: EASE }}
+                  transition={{ duration: 0.7, delay: 0.75 + i * 0.11, ease: EASE }}
                 />
-                {/* Beat 5 — data pulses keep travelling the traces */}
+                {/* Beat 4 — data pulses keep travelling the traces */}
                 <motion.path
                   d={d}
+                  pathLength={100}
                   stroke="#fff2d1"
                   strokeWidth="2.2"
-                  strokeDasharray="10 460"
+                  strokeDasharray="16 84"
                   filter="url(#neon)"
-                  initial={{ strokeDashoffset: 470, opacity: 0 }}
-                  animate={{ strokeDashoffset: [470, 0], opacity: [0, 1, 1, 0] }}
+                  initial={{ strokeDashoffset: 100, opacity: 0 }}
+                  animate={{ strokeDashoffset: [100, 0], opacity: [0, 1, 1, 0] }}
                   transition={{
-                    duration: 2.8,
-                    delay: 2.1 + i * 0.45,
+                    duration: 1.1,
+                    delay: 1.9 + i * 0.28,
                     repeat: Infinity,
-                    repeatDelay: 2.4,
+                    repeatDelay: 1.6,
                     ease: "linear",
                   }}
                 />
@@ -129,13 +143,13 @@ export default function IsoScene({
 
         {/* Beat 3 — capability nodes light up */}
         {NODES.map((n, i) => {
-          const [sx, sy] = iso(n.x, n.y, 0.34);
+          const [sx, sy] = polar(n.angle, NODE_R);
           return (
             <motion.g
               key={n.id}
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 1.5 + i * 0.1, ease: EASE }}
+              transition={{ duration: 0.6, delay: 1.3 + i * 0.1, ease: EASE }}
               style={{ transformOrigin: `${sx}px ${sy}px` }}
             >
               <circle cx={sx} cy={sy} r="30" fill="url(#coreGlow)" opacity="0.6" />
@@ -164,25 +178,30 @@ export default function IsoScene({
           );
         })}
 
-        {/* Beat 4 — the core ignites and the mark rises into the light */}
-        <motion.g
-          initial={{ opacity: 0, y: 34 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* The core glow the logo sits inside */}
+        <motion.circle
+          cx={CX}
+          cy={CY}
+          r="150"
+          fill="url(#coreGlow)"
+          opacity="0.7"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.7 }}
           transition={{ duration: 0.85, delay: 0.35, ease: EASE }}
-        >
-          <circle cx={CX} cy={CY - 0.34 * U} r="150" fill="url(#coreGlow)" opacity="0.7" />
-        </motion.g>
+        />
       </motion.svg>
 
-      {/* Faux-3D mark, floating at the core. Kept in HTML rather than SVG so
-          it can use real CSS 3D transforms for the extrusion. */}
+      {/* Faux-3D mark, floating inside the clearance ring. Kept in HTML
+          rather than SVG so it can use real CSS 3D transforms for the
+          extrusion — its own tilt is independent of the flat circuit
+          around it. */}
       <motion.div
         className="absolute"
         style={{
           left: `${(CX / 600) * 100}%`,
-          top: `${((CY - 0.34 * U) / 520) * 100}%`,
+          top: `${(CY / 520) * 100}%`,
           x: "-50%",
-          y: "-58%",
+          y: "-50%",
         }}
         initial={{ opacity: 0, scale: 0.6 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -190,6 +209,6 @@ export default function IsoScene({
       >
         <Logo3D mx={mx} my={my} size={168} />
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
